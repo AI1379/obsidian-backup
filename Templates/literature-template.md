@@ -6,6 +6,12 @@
 {{bibliography}}
 ```
 
+Cite Key:
+
+```plaintext
+{{citekey}}
+```
+
 URL：[{{url}}]({{url}})
 {% if abstractNote %}
 ## 📌 摘要
