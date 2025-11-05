@@ -1,3 +1,9 @@
+---
+tags:
+  - Linux
+  - 运维
+---
+
 > 使用 DeepSeek-V3 生成
 
 # 彻底清除 Git Submodule 的步骤

@@ -1,3 +1,7 @@
+---
+tags:
+  - 运维
+---
 > 使用 Gemini-2.5-pro 生成
 
 好的，这是一个非常棒的问题！从 Bash 切换到 PowerShell (pwsh) 的开发者经常需要寻找熟悉的命令。PowerShell 的设计哲学与 Bash 有很大不同（**对象管道 vs. 文本流**），但为了方便过渡，PowerShell 团队创建了很多与 Bash/Linux 命令同名的**别名 (Alias)**。
@@ -15,37 +19,37 @@
 
 ### 命令对照表
 
-| 分类 | Bash 命令 | PowerShell 等价命令 | 别名 (Aliases) | 注释 / 示例 |
-| :--- | :--- | :--- | :--- | :--- |
-| **文件 & 目录** | `ls`, `ls -l` | `Get-ChildItem` | `ls`, `dir`, `gci` | `ls` 返回的是文件/目录对象，而不仅仅是文本。`ls -l` 类似于 `Get-ChildItem \| Format-Table` |
-| | `cd` | `Set-Location` | `cd`, `sl` | 功能几乎完全相同。`cd ~` 对应 `Set-Location ~` |
-| | `pwd` | `Get-Location` | `pwd`, `gl` | 返回一个包含路径信息的对象。 |
-| | `cp` | `Copy-Item` | `cp`, `copy`, `cpi` | `cp -r sourcedir destdir` 对应 `Copy-Item -Path sourcedir -Destination destdir -Recurse` |
-| | `mv` | `Move-Item` | `mv`, `move`, `mi` | 用法与 `Copy-Item` 类似。 |
-| | `rm` | `Remove-Item` | `rm`, `del`, `ri` | `rm -rf dirname` 对应 `Remove-Item -Path dirname -Recurse -Force`。**务必小心！** |
-| | `mkdir` | `New-Item -ItemType Directory` | `mkdir`, `md` | `mkdir -p a/b/c` 对应 `New-Item -Path "a/b/c" -ItemType Directory -Force` |
-| | `touch` | `New-Item -ItemType File` | `ni` | `New-Item my_file.txt -ItemType File`。或用重定向 `"" > my_file.txt` |
-| | `cat` | `Get-Content` | `cat`, `gc`, `type` | `Get-Content` 可以读取文件内容为字符串数组。 |
-| **文本处理** | `grep` | `Select-String` | `sls` | 功能非常强大，返回匹配对象（包含行号、文件名等）。`grep -v` 对应 `Select-String -NotMatch`。 |
-| | `head` | `Select-Object -First <N>` | `select` | `Get-Content file.txt \| Select-Object -First 10` |
-| | `tail` | `Select-Object -Last <N>` | `select` | `Get-Content file.txt \| Select-Object -Last 10`。`tail -f` 对应 `Get-Content file.txt -Wait` |
-| | `sort` | `Sort-Object` | `sort` | 可以按对象属性排序。`ls \| Sort-Object -Property Length -Descending` |
-| | `uniq` | `Get-Unique` / `Sort-Object -Unique` | `gu` | `Get-Unique` 处理已排序的文本行。`Sort-Object -Unique` 更常用，集排序和去重于一体。 |
-| | `wc -l` | `Measure-Object -Line` | `measure` | `Get-Content file.txt \| Measure-Object -Line`。更简单的方式是 `(Get-Content file.txt).Count` |
-| | `sed` / `awk` | `ForEach-Object`, `-replace` 操作符 | `%`, `foreach` | **无直接对应**。PowerShell 通过对象操作实现。例如 `sed 's/foo/bar/g'` 对应 `(Get-Content file.txt) -replace 'foo', 'bar'` |
-| **进程管理** | `ps` | `Get-Process` | `ps`, `gps` | 返回进程对象，可以轻松地排序、筛选和操作。`ps aux` 类似于 `Get-Process` |
-| | `kill` | `Stop-Process` | `kill`, `spps` | `Stop-Process -Name "notepad"` 或 `Stop-Process -Id 1234` |
-| | `top` | (无内置) | | `Get-Process \| Sort-Object -Descending CPU \| Select-Object -First 20` 可以实现一个静态快照。 |
-| **网络** | `curl` | `Invoke-WebRequest` | `curl`, `iwr`, `wget` | `iwr` 返回一个包含状态码、头、内容的丰富对象。 |
-| | `wget` | `Invoke-WebRequest -OutFile <file>` | `curl`, `iwr`, `wget` | `wget http://.../file.zip` 对应 `Invoke-WebRequest http://.../file.zip -OutFile file.zip` |
-| | | `Invoke-RestMethod` | `irm` | 专门用于API调用，会自动将JSON/XML响应转换为PowerShell对象。 |
-| | `ping` | `Test-Connection` | `ping`, `tcm` | 返回包含延迟、TTL等信息的对象。 |
-| | `ifconfig` / `ip` | `Get-NetIPAddress`, `Get-NetAdapter` | | `Get-NetAdapter` 查看网络适配器，`Get-NetIPAddress` 查看IP地址。 |
-| **系统 & 权限** | `echo` | `Write-Output` | `echo`, `write` | `Write-Output` 是将对象写入管道的标准方式。`Write-Host` 则是直接打印到控制台，一般仅用于脚本的用户交互提示。 |
-| | `export` | `$env:VAR="value"` | | `export FOO=bar` 对应 `$env:FOO = "bar"`。这会设置当前会话的环境变量。 |
-| | `man` | `Get-Help` | `help`, `man` | `man ls` 对应 `Get-Help Get-ChildItem`。使用 `Get-Help Get-ChildItem -Examples` 或 `-Full` 获取更详细信息。 |
-| | `chmod` / `chown` | `Get-Acl`, `Set-Acl` | | **复杂得多**。因为Windows使用访问控制列表(ACL)而不是简单的`rwx`权限。这是一个较大的话题。 |
-| | `which` | `Get-Command` | `gcm` | `gcm ls` 会告诉你 `ls` 是 `Get-ChildItem` 的一个别名。 |
+| 分类          | Bash 命令           | PowerShell 等价命令                      | 别名 (Aliases)          | 注释 / 示例                                                                                                |
+| :---------- | :---------------- | :----------------------------------- | :-------------------- | :----------------------------------------------------------------------------------------------------- |
+| **文件 & 目录** | `ls`, `ls -l`     | `Get-ChildItem`                      | `ls`, `dir`, `gci`    | `ls` 返回的是文件/目录对象，而不仅仅是文本。`ls -l` 类似于 `Get-ChildItem \| Format-Table`                                   |
+|             | `cd`              | `Set-Location`                       | `cd`, `sl`            | 功能几乎完全相同。`cd ~` 对应 `Set-Location ~`                                                                    |
+|             | `pwd`             | `Get-Location`                       | `pwd`, `gl`           | 返回一个包含路径信息的对象。                                                                                         |
+|             | `cp`              | `Copy-Item`                          | `cp`, `copy`, `cpi`   | `cp -r sourcedir destdir` 对应 `Copy-Item -Path sourcedir -Destination destdir -Recurse`                 |
+|             | `mv`              | `Move-Item`                          | `mv`, `move`, `mi`    | 用法与 `Copy-Item` 类似。                                                                                    |
+|             | `rm`              | `Remove-Item`                        | `rm`, `del`, `ri`     | `rm -rf dirname` 对应 `Remove-Item -Path dirname -Recurse -Force`。**务必小心！**                              |
+|             | `mkdir`           | `New-Item -ItemType Directory`       | `mkdir`, `md`         | `mkdir -p a/b/c` 对应 `New-Item -Path "a/b/c" -ItemType Directory -Force`                                |
+|             | `touch`           | `New-Item -ItemType File`            | `ni`                  | `New-Item my_file.txt -ItemType File`。或用重定向 `"" > my_file.txt`                                         |
+|             | `cat`             | `Get-Content`                        | `cat`, `gc`, `type`   | `Get-Content` 可以读取文件内容为字符串数组。                                                                          |
+| **文本处理**    | `grep`            | `Select-String`                      | `sls`                 | 功能非常强大，返回匹配对象（包含行号、文件名等）。`grep -v` 对应 `Select-String -NotMatch`。                                       |
+|             | `head`            | `Select-Object -First <N>`           | `select`              | `Get-Content file.txt \| Select-Object -First 10`                                                      |
+|             | `tail`            | `Select-Object -Last <N>`            | `select`              | `Get-Content file.txt \| Select-Object -Last 10`。`tail -f` 对应 `Get-Content file.txt -Wait`             |
+|             | `sort`            | `Sort-Object`                        | `sort`                | 可以按对象属性排序。`ls \| Sort-Object -Property Length -Descending`                                             |
+|             | `uniq`            | `Get-Unique` / `Sort-Object -Unique` | `gu`                  | `Get-Unique` 处理已排序的文本行。`Sort-Object -Unique` 更常用，集排序和去重于一体。                                            |
+|             | `wc -l`           | `Measure-Object -Line`               | `measure`             | `Get-Content file.txt \| Measure-Object -Line`。更简单的方式是 `(Get-Content file.txt).Count`                  |
+|             | `sed` / `awk`     | `ForEach-Object`, `-replace` 操作符     | `%`, `foreach`        | **无直接对应**。PowerShell 通过对象操作实现。例如 `sed 's/foo/bar/g'` 对应 `(Get-Content file.txt) -replace 'foo', 'bar'` |
+| **进程管理**    | `ps`              | `Get-Process`                        | `ps`, `gps`           | 返回进程对象，可以轻松地排序、筛选和操作。`ps aux` 类似于 `Get-Process`                                                        |
+|             | `kill`            | `Stop-Process`                       | `kill`, `spps`        | `Stop-Process -Name "notepad"` 或 `Stop-Process -Id 1234`                                               |
+|             | `top`             | (无内置)                                |                       | `Get-Process \| Sort-Object -Descending CPU \| Select-Object -First 20` 可以实现一个静态快照。                    |
+| **网络**      | `curl`            | `Invoke-WebRequest`                  | `curl`, `iwr`, `wget` | `iwr` 返回一个包含状态码、头、内容的丰富对象。                                                                             |
+|             | `wget`            | `Invoke-WebRequest -OutFile <file>`  | `curl`, `iwr`, `wget` | `wget http://.../file.zip` 对应 `Invoke-WebRequest http://.../file.zip -OutFile file.zip`                |
+|             |                   | `Invoke-RestMethod`                  | `irm`                 | 专门用于API调用，会自动将JSON/XML响应转换为PowerShell对象。                                                               |
+|             | `ping`            | `Test-Connection`                    | `ping`, `tcm`         | 返回包含延迟、TTL等信息的对象。                                                                                      |
+|             | `ifconfig` / `ip` | `Get-NetIPAddress`, `Get-NetAdapter` |                       | `Get-NetAdapter` 查看网络适配器，`Get-NetIPAddress` 查看IP地址。                                                    |
+| **系统 & 权限** | `echo`            | `Write-Output`                       | `echo`, `write`       | `Write-Output` 是将对象写入管道的标准方式。`Write-Host` 则是直接打印到控制台，一般仅用于脚本的用户交互提示。                                   |
+|             | `export`          | `$env:VAR="value"`                   |                       | `export FOO=bar` 对应 `$env:FOO = "bar"`。这会设置当前会话的环境变量。                                                  |
+|             | `man`             | `Get-Help`                           | `help`, `man`         | `man ls` 对应 `Get-Help Get-ChildItem`。使用 `Get-Help Get-ChildItem -Examples` 或 `-Full` 获取更详细信息。          |
+|             | `chmod` / `chown` | `Get-Acl`, `Set-Acl`                 |                       | **复杂得多**。因为Windows使用访问控制列表(ACL)而不是简单的`rwx`权限。这是一个较大的话题。                                                |
+|             | `which`           | `Get-Command`                        | `gcm`                 | `gcm ls` 会告诉你 `ls` 是 `Get-ChildItem` 的一个别名。                                                            |
 
 ### 示例对比：查找并终止所有名为 "chrome" 的进程
 

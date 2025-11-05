@@ -4,8 +4,6 @@ tags:
   - LLM
 ---
 
-
-
 > 归档：[[huangRetrievalAugmentedGenerationHierarchical2025]]
 
 ## Hierarchical Index
