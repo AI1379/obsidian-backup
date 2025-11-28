@@ -18,3 +18,7 @@ Graph-based Retrieval-Augmented Generation (RAG) methods have significantly enha
 - [ ] 本文与我的课题关联点：这篇文章提出的 Hierarchical RAG 或许与我设想的 YOLO 类似的 RAG 比较相近。
 - [ ] 可复现的实验：_________
 
+### 2025-11-28
+
+目前回顾这篇文献，可以看到 HiRAG 的核心思想似乎是继承自 GraphRAG 的。从这个角度进一步延伸，我们需要的似乎不是一个 YOLO 形式的召回系统，而是一个图神经网络形式的一个找回系统，因此也许可以查询 GNN 方向的文献进一步研究。
+
