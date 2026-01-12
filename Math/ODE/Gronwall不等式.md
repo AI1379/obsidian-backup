@@ -2,6 +2,7 @@
 tags:
   - ODE
 ---
+
 ## 单调不减时的 Gronwall 不等式
 
 对于积分不等式：
@@ -57,3 +58,16 @@ $$
 u(t) \leq \beta(t) + R(t) \leq \beta(t)\exp\left( \int_{a}^t \alpha(s)\mathrm{d}s \right)
 $$
 
+## 非齐次形式
+
+此时的不等式为：
+
+$$
+u(t) \leq \beta(t) + \int_{a}^t \left[ u(s)\alpha(s) + K \right]  \mathrm{d}s
+$$
+
+对应的结论也会添加一个非齐次项：
+
+$$
+u(t) \leq [\beta(t) + K(x-x_{0})] \exp\left( \int_{a}^x \alpha(s)\mathrm{d}s \right)
+$$
