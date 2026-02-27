@@ -1,6 +1,7 @@
 ---
 tags:
   - 运维
+  - Windows
 ---
 > 使用 Gemini-2.5-pro 生成
 
