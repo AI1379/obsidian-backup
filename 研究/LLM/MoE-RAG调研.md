@@ -5,6 +5,7 @@ tags:
   - LLM
   - 论文调研
 date: 2026-02-28
+source: OpenClaw
 ---
 
 > 为 Renatus 的灵感所做的调研：一种根据输入自动激活不同记忆方向的 MoE-like RAG 系统
@@ -35,7 +36,7 @@ MoE-RAG 的思路：
 
 ### 1. ExpertRAG: Efficient RAG with Mixture of Experts
 
-**arXiv: 2504.08744** (2025年3月)
+**arXiv: 2504.08744** (2025 年 3 月)
 
 **核心贡献：**
 - 提出动态检索门控机制（dynamic retrieval gating）
@@ -44,6 +45,7 @@ MoE-RAG 的思路：
 - 理论分析：推导计算成本节省公式
 
 **关键洞察：**
+
 > "We propose a dynamic retrieval gating mechanism coupled with expert routing, enabling the model to selectively consult an external knowledge store or rely on specialized internal experts based on the query's needs."
 
 这与你的想法非常吻合！ExpertRAG 允许模型在「需要外部知识」和「内部参数知识足够」之间动态选择。
@@ -54,7 +56,7 @@ MoE-RAG 的思路：
 
 ### 2. MIXRAG: Mixture-of-Experts RAG for Textual Graph Understanding
 
-**arXiv: 2509.21391** (2025年9月，2026年2月更新)
+**arXiv: 2509.21391** (2025 年 9 月，2026 年 2 月更新)
 
 **核心贡献：**
 - 多个专业化图检索器，分别专注于：实体、关系、子图拓扑
@@ -72,7 +74,7 @@ MoE-RAG 的思路：
 
 ### 3. RAGRouter: Learning to Route Queries to Multiple RAG Systems
 
-**arXiv: 2505.23052** (2025年5月)
+**arXiv: 2505.23052** (2025 年 5 月)
 
 **核心贡献：**
 - 正式定义「检索增强 LLM 路由问题」
