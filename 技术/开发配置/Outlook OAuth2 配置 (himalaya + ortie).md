@@ -1,3 +1,8 @@
+---
+tags:
+  - Linux
+---
+
 # Outlook OAuth2 配置 (himalaya + ortie)
 
 > 配置日期：2026-03-28
@@ -19,7 +24,7 @@
 2. 名称：`himalaya-mail`（或任意名称）
 3. 支持的账户类型：**任何组织目录中的账户和个人 Microsoft 账户**
 4. 重定向 URI：添加平台 → 移动和桌面应用程序 → `http://localhost`
-5. 记录：应用程序(客户端) ID
+5. 记录：应用程序 (客户端) ID
 
 ### API 权限
 
@@ -36,7 +41,7 @@
 default = true
 
 # 客户端 ID（从 Azure 获取）
-client-id = "e399c623-9d92-472a-b8a7-515106ee5625"
+client-id = "client-id"
 
 # 注意：PKCE 模式不需要 client-secret
 # client-secret.raw = "xxx"
@@ -132,9 +137,9 @@ Access token successfully issued (expires in 1h)
 
 ### userAudience 配置错误
 
-**原因**: Azure 应用配置为"仅个人账户"，但使用了 `/common/` 端点
+**原因**: Azure 应用配置为 " 仅个人账户 "，但使用了 `/common/` 端点
 
-**解决**: 改用 `/consumers/` 端点，或修改 Azure 应用为"任何组织目录中的账户和个人 Microsoft 账户"
+**解决**: 改用 `/consumers/` 端点，或修改 Azure 应用为 " 任何组织目录中的账户和个人 Microsoft 账户 "
 
 ## himalaya 配置
 
