@@ -1,6 +1,6 @@
 # Python AI Agent Bot 框架 — 架构设计文档
 
-> **项目代号**: NadaBot（暂定）
+> **项目代号**: NahidaBot（暂定）
 > **版本**: v0.1-draft
 > **日期**: 2026-04-06
 > **作者**: Renatus Madrigal + Nahida
