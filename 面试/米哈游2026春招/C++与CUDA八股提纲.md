@@ -932,6 +932,1137 @@ std::sort(std::execution::par_unseq, v.begin(), v.end());
 
 注意：并行算法的迭代器要求较严格（至少是前向迭代器），异常处理和线程安全也需要关注。
 
+### 9. 实验代码
+
+以下每个实验都是一个独立可编译运行的 `.cpp` 文件。编译建议：
+
+```bash
+# 基础编译
+g++ -std=c++17 -pthread -O2 exp_xxx.cpp -o exp_xxx
+
+# 建议同时用 ThreadSanitizer 检测数据竞争
+g++ -std=c++17 -pthread -O2 -fsanitize=thread exp_xxx.cpp -o exp_xxx_tsan
+
+# 部分实验需要 C++20 (latch/barrier)
+g++ -std=c++20 -pthread -O2 exp_xxx.cpp -o exp_xxx
+```
+
+---
+
+#### 实验 1：Mutex 家族与 RAII 锁管理器
+
+演示 `lock_guard`、`unique_lock`、`scoped_lock`、`shared_mutex` 的使用场景。
+
+```cpp
+// exp_mutex_family.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_mutex_family.cpp -o exp_mutex_family
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <shared_mutex>
+#include <vector>
+#include <chrono>
+
+// ========== 场景 1：lock_guard — 最简单临界区保护 ==========
+void demo_lock_guard() {
+    std::mutex m;
+    int counter = 0;
+    constexpr int N = 100000;
+
+    auto worker = [&] {
+        for (int i = 0; i < N; ++i) {
+            std::lock_guard<std::mutex> lg(m);  // 构造加锁，析构解锁
+            ++counter;
+        }
+    };
+
+    std::thread t1(worker), t2(worker);
+    t1.join(); t2.join();
+    std::cout << "[lock_guard] counter = " << counter
+              << " (expected " << 2 * N << ")\n";
+}
+
+// ========== 场景 2：unique_lock — 配合条件变量 / 手动解锁 ==========
+void demo_unique_lock() {
+    std::mutex m;
+    bool ready = false;
+    int data = 0;
+
+    std::thread producer([&] {
+        {
+            std::unique_lock<std::mutex> ul(m);
+            data = 42;
+            ready = true;
+            // unique_lock 可以在此处手动 unlock，也可以让析构处理
+        }
+        // 锁已释放，消费者可以获取
+    });
+
+    std::thread consumer([&] {
+        // 轮询等待 ready（生产环境请用 condition_variable，见实验 2）
+        while (true) {
+            std::unique_lock<std::mutex> ul(m);
+            if (ready) {
+                std::cout << "[unique_lock] data = " << data << " (should be 42)\n";
+                break;
+            }
+            ul.unlock();  // 手动释放让 producer 能获取锁
+            std::this_thread::yield();
+        }
+    });
+
+    producer.join(); consumer.join();
+}
+
+// ========== 场景 3：scoped_lock — 同时锁多个 mutex，避免死锁 ==========
+void demo_scoped_lock() {
+    std::mutex m1, m2;
+    int a = 0, b = 0;
+
+    // 如果分别 lock(m1); lock(m2); 可能死锁
+    // scoped_lock 内部用 std::lock 算法，保证无死锁
+    auto transfer_1_to_2 = [&] {
+        for (int i = 0; i < 10000; ++i) {
+            std::scoped_lock lock(m1, m2);  // C++17: 同时锁两个
+            ++a; --b;
+        }
+    };
+    auto transfer_2_to_1 = [&] {
+        for (int i = 0; i < 10000; ++i) {
+            std::scoped_lock lock(m1, m2);
+            --a; ++b;
+        }
+    };
+
+    std::thread t1(transfer_1_to_2), t2(transfer_2_to_1);
+    t1.join(); t2.join();
+    std::cout << "[scoped_lock] a=" << a << " b=" << b
+              << " (sum should be 0)\n";
+}
+
+// ========== 场景 4：shared_mutex — 读多写少 ==========
+void demo_shared_mutex() {
+    std::shared_mutex sm;
+    int data = 0;
+    std::atomic<int> read_count{0};
+
+    // 写线程：独占锁
+    auto writer = [&] {
+        for (int i = 0; i < 10; ++i) {
+            std::unique_lock<std::shared_mutex> ul(sm);  // 独占写锁
+            ++data;
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        }
+    };
+
+    // 读线程：共享锁
+    auto reader = [&](int id) {
+        for (int i = 0; i < 50; ++i) {
+            std::shared_lock<std::shared_mutex> sl(sm);  // 共享读锁
+            volatile int _ = data;  // 模拟读
+            read_count.fetch_add(1, std::memory_order_relaxed);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    };
+
+    std::thread tw(writer);
+    std::vector<std::thread> readers;
+    for (int i = 0; i < 4; ++i)
+        readers.emplace_back(reader, i);
+
+    tw.join();
+    for (auto& t : readers) t.join();
+    std::cout << "[shared_mutex] final data=" << data
+              << " total reads=" << read_count.load() << "\n";
+}
+
+int main() {
+    demo_lock_guard();********
+    demo_unique_lock();
+    demo_scoped_lock();
+    demo_shared_mutex();
+    return 0;
+}
+```
+
+**预期输出理解**：每个场景的结果都应和 `expected` 一致。如果不用锁（注释掉 lock_guard 那行），counter 大概率不会是 2N——这就是数据竞争。
+
+---
+
+#### 实验 2：条件变量 — 生产者 / 消费者
+
+演示 `condition_variable`、虚假唤醒处理、`notify_one` vs `notify_all`。
+
+```cpp
+// exp_condition_variable.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_condition_variable.cpp -o exp_condition_variable
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+#include <chrono>
+#include <vector>
+
+int main() {
+    std::mutex m;
+    std::condition_variable cv;
+    std::queue<int> q;
+    bool done = false;  // 生产者结束标志
+
+    constexpr int TOTAL = 20;
+
+    // ========== 生产者：每 50ms 生产一个 ==========
+    std::thread producer([&] {
+        for (int i = 1; i <= TOTAL; ++i) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            {
+                std::lock_guard<std::mutex> lg(m);
+                q.push(i);
+                std::cout << "[producer] produced " << i << "\n";
+            }
+            cv.notify_one();  // 通知一个等待的消费者
+        }
+        {
+            std::lock_guard<std::mutex> lg(m);
+            done = true;
+        }
+        cv.notify_all();  // 通知所有消费者（done 是全局性的）
+    });
+
+    // ========== 消费者：等待并处理 ==========
+    auto consumer = [&](int id) {
+        while (true) {
+            std::unique_lock<std::mutex> ul(m);
+
+            // ★ 带谓词的 wait：自动处理虚假唤醒
+            // 等价于 while (!pred()) { cv.wait(ul); }
+            cv.wait(ul, [&] { return !q.empty() || done; });
+
+            if (!q.empty()) {
+                int val = q.front(); q.pop();
+                ul.unlock();  // 尽早释放锁，让其他线程可以获取
+                std::cout << "  [consumer " << id << "] consumed " << val << "\n";
+            } else if (done) {
+                break;  // done && queue empty → 退出
+            }
+        }
+    };
+
+    std::vector<std::thread> consumers;
+    for (int i = 0; i < 3; ++i)
+        consumers.emplace_back(consumer, i);
+
+    producer.join();
+    for (auto& t : consumers) t.join();
+    std::cout << "All done.\n";
+    return 0;
+}
+```
+
+**动手实验**：
+1. 把 `cv.wait(ul, [&]{...})` 改成 `cv.wait(ul)` ——会发生什么？（生产者结束后消费者可能永远阻塞）
+2. 把 `cv.notify_one()` 改成注释掉——消费者是否还能取到数据？（不能，会一直等待）
+3. 把 `producer` 的 `lg` 局部作用域 `{}` 去掉——锁持有太久，消费者等锁时数据已经在队列里了
+
+---
+
+#### 实验 3：atomic — `x = x + 1` 不是原子的！
+
+这个实验最直观地展示 "atomic 操作" 和 "看起来像一行但不是原子的操作" 的区别。
+
+```cpp
+// exp_atomic_basic.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_atomic_basic.cpp -o exp_atomic_basic
+// ThreadSanitizer: g++ -std=c++17 -pthread -O2 -fsanitize=thread exp_atomic_basic.cpp -o exp_atomic_tsan
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <vector>
+#include <chrono>
+
+int main() {
+    constexpr int N_THREADS = 8;
+    constexpr int N_INCREMENTS = 100000;
+
+    // ====== 版本 1：非原子 int，用 x = x + 1 ======
+    {
+        int non_atomic = 0;
+        auto worker = [&] {
+            for (int i = 0; i < N_INCREMENTS; ++i) {
+                // ★ 这一行包含 3 步：load -> add -> store，不是原子的
+                non_atomic = non_atomic + 1;
+            }
+        };
+
+        std::vector<std::thread> threads;
+        for (int i = 0; i < N_THREADS; ++i)
+            threads.emplace_back(worker);
+        for (auto& t : threads) t.join();
+
+        std::cout << "[non-atomic] counter = " << non_atomic
+                  << " (expected " << N_THREADS * N_INCREMENTS << ")"
+                  << " lost: " << (N_THREADS * N_INCREMENTS - non_atomic) << "\n";
+    }
+
+    // ====== 版本 2：atomic int，用 fetch_add（原子） ======
+    {
+        std::atomic<int> atomic_counter{0};
+        auto worker = [&] {
+            for (int i = 0; i < N_INCREMENTS; ++i) {
+                atomic_counter.fetch_add(1, std::memory_order_relaxed);
+            }
+        };
+
+        std::vector<std::thread> threads;
+        for (int i = 0; i < N_THREADS; ++i)
+            threads.emplace_back(worker);
+        for (auto& t : threads) t.join();
+
+        std::cout << "[atomic fetch_add] counter = " << atomic_counter.load()
+                  << " (expected " << N_THREADS * N_INCREMENTS << ")\n";
+    }
+
+    // ====== 版本 3：atomic int，但用 x = x + 1（还是非原子的整体操作！） ======
+    {
+        std::atomic<int> a{0};
+        auto worker = [&] {
+            for (int i = 0; i < N_INCREMENTS; ++i) {
+                // ★ 即使变量是 atomic<int>，x = x + 1 也包含 load→add→store 三步
+                // 三步之间另一个线程可能插进来修改
+                a = a + 1;  // 等价于 a.store(a.load() + 1); ——不是原子的整体
+            }
+        };
+
+        std::vector<std::thread> threads;
+        for (int i = 0; i < N_THREADS; ++i)
+            threads.emplace_back(worker);
+        for (auto& t : threads) t.join();
+
+        std::cout << "[atomic but x=x+1] counter = " << a.load()
+                  << " (expected " << N_THREADS * N_INCREMENTS << ")"
+                  << " lost: " << (N_THREADS * N_INCREMENTS - a.load())
+                  << " — even atomic<int> doesn't make x=x+1 atomic!\n";
+    }
+
+    // ====== 版本 4：CAS 循环实现无锁加法（等价于 fetch_add） ======
+    {
+        std::atomic<int> cas_counter{0};
+        auto worker = [&] {
+            for (int i = 0; i < N_INCREMENTS; ++i) {
+                int expected = cas_counter.load(std::memory_order_relaxed);
+                // ★ compare_exchange_weak 在 x86 上可能虚假失败，但循环保证正确
+                while (!cas_counter.compare_exchange_weak(
+                    expected, expected + 1,
+                    std::memory_order_relaxed,
+                    std::memory_order_relaxed))
+                {
+                    // expected 被自动更新为当前值，继续重试
+                }
+            }
+        };
+
+        std::vector<std::thread> threads;
+        for (int i = 0; i < N_THREADS; ++i)
+            threads.emplace_back(worker);
+        for (auto& t : threads) t.join();
+
+        std::cout << "[CAS loop]     counter = " << cas_counter.load()
+                  << " (expected " << N_THREADS * N_INCREMENTS << ")\n";
+    }
+
+    return 0;
+}
+```
+
+**预期输出**（典型）：
+```
+[non-atomic] counter = 234567 (expected 800000) lost: 565433
+[atomic fetch_add] counter = 800000 (expected 800000)
+[atomic but x=x+1] counter = 312456 (expected 800000) lost: 487544
+[CAS loop]     counter = 800000 (expected 800000)
+```
+
+关键理解：**`atomic` 保证单个操作的原子性（load/store/fetch_add），但 `x = x + 1` 是两个原子操作夹一个非原子加法，整体不是原子的。**
+
+---
+
+#### 实验 4：内存序 — relaxed 的 "不可靠" 标志位
+
+这是理解内存序最重要的实验。我们用 `relaxed` 和 `release/acquire` 对比同一个场景。
+
+```cpp
+// exp_memory_order_flag.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_memory_order_flag.cpp -o exp_memory_order_flag
+// ★ 在 x86 上编译器重排主要体现在 O2 下。ARM 上硬件也会重排。
+// ★ 如果你有 ARM 机器（树莓派/苹果 M 系列），跑这个实验会更明显。
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <cassert>
+
+// 共享数据
+int data = 0;                              // 非原子数据
+std::atomic<bool> ready{false};           // 标志位
+
+constexpr int ITERATIONS = 1000000;
+
+// ====== 版本 1：relaxed — 无同步保证 ======
+void test_relaxed() {
+    int violations = 0;
+    for (int iter = 0; iter < ITERATIONS; ++iter) {
+        data = 0;
+        ready.store(false, std::memory_order_relaxed);
+
+        std::thread writer([&] {
+            data = 42;                                        // ① 写数据
+            ready.store(true, std::memory_order_relaxed);     // ② relaxed 标记
+            // 用 relaxed 时，编译器/CPU 可以重排 ① 和 ②！
+            // 其他线程可能先看到 ready=true，再看到 data=42
+        });
+
+        std::thread reader([&] {
+            if (ready.load(std::memory_order_relaxed)) {      // ③ relaxed 读
+                if (data != 42) {                             // ④
+                    ++violations;  // ★ 重排发生了！
+                }
+            }
+        });
+
+        writer.join(); reader.join();
+    }
+    std::cout << "[relaxed] violations: " << violations
+              << " / " << ITERATIONS << " iterations\n";
+    if (violations > 0)
+        std::cout << "  -> 编译器或 CPU 重排了 data=42 和 ready=true 的顺序！\n";
+}
+
+// ====== 版本 2：release/acquire — 正确的同步 ======
+void test_release_acquire() {
+    int violations = 0;
+    for (int iter = 0; iter < ITERATIONS; ++iter) {
+        data = 0;
+        ready.store(false, std::memory_order_relaxed);
+
+        std::thread writer([&] {
+            data = 42;                                         // ① 写数据
+            ready.store(true, std::memory_order_release);      // ② release 发布
+            // release 保证：② 之前的所有写（包括 data=42）在 ② 对 acquire 可见时也可见
+        });
+
+        std::thread reader([&] {
+            if (ready.load(std::memory_order_acquire)) {       // ③ acquire 获取
+                // acquire 保证：③ 之后的代码一定能看到 release 之前的写
+                if (data != 42) {
+                    ++violations;  // ★ 如果有 violation，说明同步失败
+                }
+            }
+        });
+
+        writer.join(); reader.join();
+    }
+    std::cout << "[release/acquire] violations: " << violations
+              << " / " << ITERATIONS << " iterations\n";
+}
+
+int main() {
+    test_relaxed();
+    test_release_acquire();
+    return 0;
+}
+```
+
+**预期行为**：
+- `relaxed`：在 x86 上由于硬件 TSO（Total Store Order）模型，store-store 重排很少见，但 **编译器重排** 在高优化等级下可能发生。在 ARM 上 violations 会更明显。
+- `release/acquire`：violations 必须是 0——这是标准的同步语义保证。
+
+> **CPU 架构影响**：x86 是强内存模型（TSO），很多 relaxed 能 " 碰巧正常工作 "。ARM/PowerPC 是弱内存模型，relaxed 的违规会更频繁出现。这也是为什么写跨平台代码必须用正确的 memory_order——在 x86 上 " 测试通过 " 不代表在 ARM 上也正确。
+
+---
+
+#### 实验 5：内存序 — seq_cst 的全局顺序 vs acquire/release 的局部同步
+
+IRIW（Independent Readers, Independent Writers）模式展示了 seq_cst 和 acquire/release 的关键区别：seq_cst 保证所有线程看到一致的全局操作顺序。
+
+```cpp
+// exp_memory_order_iriw.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_memory_order_iriw.cpp -o exp_memory_order_iriw
+// ★ 这个实验在 x86 上可能两者都不违规（x86 store-store 有序，load 也有较强保证）
+// ★ 在 ARM 上差异更明显
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <vector>
+
+template<typename MO>
+void test_iriw(const char* name, MO mo_write, MO mo_read) {
+    // IRIW: Independent Readers, Independent Writers
+    // Thread 1: x = 1        Thread 3: r1 = x; r2 = y;
+    // Thread 2: y = 1        Thread 4: r3 = y; r4 = x;
+    // 问题：能否出现 r1=1,r2=0 且 r3=1,r4=0？(两个读者看到的写顺序不一致)
+
+    std::atomic<int> x{0}, y{0};
+    constexpr int ITERATIONS = 100000;
+    int violation_count = 0;
+
+    for (int iter = 0; iter < ITERATIONS; ++iter) {
+        x.store(0); y.store(0);
+        std::atomic<bool> ready1{false}, ready2{false};
+        int r1_val = 0, r2_val = 0, r3_val = 0, r4_val = 0;
+
+        std::thread t1([&] { x.store(1, mo_write); });
+        std::thread t2([&] { y.store(1, mo_write); });
+        std::thread t3([&] {
+            r1_val = x.load(mo_read);
+            r2_val = y.load(mo_read);
+        });
+        std::thread t4([&] {
+            r3_val = y.load(mo_read);
+            r4_val = x.load(mo_read);
+        });
+
+        t1.join(); t2.join(); t3.join(); t4.join();
+
+        if (r1_val == 1 && r2_val == 0 && r3_val == 1 && r4_val == 0) {
+            ++violation_count;
+        }
+    }
+
+    std::cout << "[" << name << "] IRIW violations: " << violation_count
+              << " / " << ITERATIONS << "\n";
+
+    if (violation_count > 0) {
+        std::cout << "  -> 两个读者看到了不同的写入顺序！"
+                  << " T3 认为 x 先于 y 写入，T4 认为 y 先于 x 写入。\n";
+        std::cout << "  -> 这说明没有全局统一的顺序。\n";
+    } else {
+        std::cout << "  -> 所有读者看到了一致的写入顺序（全局顺序）或碰巧没抓到。\n";
+    }
+}
+
+int main() {
+    std::cout << "=== IRIW Test: relaxed ===\n";
+    test_iriw("relaxed", std::memory_order_relaxed, std::memory_order_relaxed);
+
+    std::cout << "\n=== IRIW Test: acquire/release ===\n";
+    test_iriw("acq_rel", std::memory_order_release, std::memory_order_acquire);
+
+    std::cout << "\n=== IRIW Test: seq_cst ===\n";
+    test_iriw("seq_cst", std::memory_order_seq_cst, std::memory_order_seq_cst);
+
+    std::cout << "\n结论：\n";
+    std::cout << "- seq_cst 保证所有 seq_cst 操作有统一的全局顺序\n";
+    std::cout << "- acquire/release 只在线程间建立 PAIRWISE 的同步\n";
+    std::cout << "- 在 x86 上由于强内存模型，acquire/release 也经常 \"碰巧\" 一致\n";
+    std::cout << "- 在 ARM 等弱内存模型上，acquire/release 的 violation 会出现\n";
+
+    return 0;
+}
+```
+
+---
+
+#### 实验 6：伪共享（False Sharing）— 量化性能影响
+
+这个实验让你亲眼看到伪共享对性能的巨大影响。
+
+```cpp
+// exp_false_sharing.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_false_sharing.cpp -o exp_false_sharing
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <chrono>
+#include <atomic>
+
+constexpr int N_INCREMENTS = 100000000;  // 1 亿次
+
+// ====== 结构 1：无 padding — 两个计数器可能在同一 cache line ======
+struct NoPadding {
+    alignas(64) std::atomic<int64_t> a{0};  // alignas(64) 这里只让 a 对齐到 cache line 开头
+    std::atomic<int64_t> b{0};   // b 紧挨着 a，大概率在同一 cache line
+};
+
+// ====== 结构 2：有 padding — 每个计数器独占一条 cache line ======
+struct WithPadding {
+    alignas(64) std::atomic<int64_t> a{0};
+    char padding[64];  // 把 b 推到下一条 cache line
+    alignas(64) std::atomic<int64_t> b{0};
+};
+
+// 或用 C++17 标准方式（如果编译器支持）
+// alignas(std::hardware_destructive_interference_size) std::atomic<int64_t> a{0};
+// alignas(std::hardware_destructive_interference_size) std::atomic<int64_t> b{0};
+
+template<typename T>
+double benchmark(T& counters) {
+    auto worker_a = [&] {
+        for (int i = 0; i < N_INCREMENTS; ++i)
+            counters.a.fetch_add(1, std::memory_order_relaxed);
+    };
+    auto worker_b = [&] {
+        for (int i = 0; i < N_INCREMENTS; ++i)
+            counters.b.fetch_add(1, std::memory_order_relaxed);
+    };
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::thread t1(worker_a), t2(worker_b);
+    t1.join(); t2.join();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    return std::chrono::duration<double, std::milli>(end - start).count();
+}
+
+int main() {
+    std::cout << "Cache line size (typical): 64 bytes\n";
+    std::cout << "Each increment: " << N_INCREMENTS << " fetch_add calls\n\n";
+
+    // 多次测量取平均
+    constexpr int RUNS = 5;
+
+    {
+        double total = 0;
+        for (int i = 0; i < RUNS; ++i) {
+            NoPadding c;
+            total += benchmark(c);
+        }
+        std::cout << "[No padding]  avg: " << total / RUNS << " ms\n";
+    }
+
+    {
+        double total = 0;
+        for (int i = 0; i < RUNS; ++i) {
+            WithPadding c;
+            total += benchmark(c);
+        }
+        std::cout << "[With padding] avg: " << total / RUNS << " ms\n";
+    }
+
+    std::cout << "\n";
+    std::cout << "★ 如果 No padding 明显更慢，就是伪共享在作祟：\n";
+    std::cout << "  两个线程分别写 a 和 b，但它们在同一 cache line 上，\n";
+    std::cout << "  cache coherence 协议导致 cache line 在两个核之间来回 \"乒乓\"。\n";
+    std::cout << "  With padding 让 a 和 b 在不同 cache line，避免了伪共享。\n";
+
+    return 0;
+}
+```
+
+**预期结果**：在大多数多核 CPU 上，`NoPadding` 耗时可能是 `WithPadding` 的 **3-10 倍**。
+
+---
+
+#### 实验 7：无锁栈 — CAS 实战 + ABA 问题演示
+
+用 CAS 实现一个最简单的无锁栈，然后演示 ABA 问题的本质。
+
+```cpp
+// exp_lockfree_stack.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_lockfree_stack.cpp -o exp_lockfree_stack
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <vector>
+#include <chrono>
+
+// ====== 最简单的无锁栈（有 ABA 风险的版本） ======
+template<typename T>
+class LockFreeStack {
+    struct Node {
+        T data;
+        Node* next;
+        Node(T d) : data(d), next(nullptr) {}
+    };
+
+    std::atomic<Node*> head_{nullptr};
+
+public:
+    void push(T val) {
+        Node* new_node = new Node(val);
+        // CAS 循环：尝试把 new_node 设为 head
+        do {
+            new_node->next = head_.load(std::memory_order_relaxed);
+        } while (!head_.compare_exchange_weak(
+            new_node->next, new_node,
+            std::memory_order_release,
+            std::memory_order_relaxed));
+    }
+
+    bool pop(T& result) {
+        Node* old_head;
+        do {
+            old_head = head_.load(std::memory_order_acquire);
+            if (!old_head) return false;  // 栈空
+        } while (!head_.compare_exchange_weak(
+            old_head, old_head->next,
+            std::memory_order_acquire,
+            std::memory_order_relaxed));
+
+        result = old_head->data;
+        // ★ ABA 风险：如果此时另一个线程 pop 了 old_head，又 push 了回来，
+        //   且 old_head 指向的 Node 被释放后新 Node 恰好分配到同一地址，
+        //   这里的 delete 会导致 use-after-free 或 double-free。
+        // 生产环境需要 hazard pointer / epoch-based reclamation / shared_ptr<atomic>
+        // delete old_head;  // 故意注释掉——正确的内存回收需要额外机制
+        return true;
+    }
+
+    ~LockFreeStack() {
+        // 简化：仅用于演示，不完整回收
+        Node* n = head_.load();
+        while (n) {
+            Node* next = n->next;
+            delete n;
+            n = next;
+        }
+    }
+};
+
+int main() {
+    constexpr int N_THREADS = 4;
+    constexpr int N_PER_THREAD = 25000;
+    constexpr int TOTAL = N_THREADS * N_PER_THREAD;
+
+    LockFreeStack<int> stack;
+
+    // ====== 多线程 push ======
+    std::vector<std::thread> producers;
+    for (int i = 0; i < N_THREADS; ++i) {
+        producers.emplace_back([&stack, i] {
+            for (int j = 0; j < N_PER_THREAD; ++j) {
+                stack.push(i * N_PER_THREAD + j);
+            }
+        });
+    }
+    for (auto& t : producers) t.join();
+
+    std::cout << "All pushes done.\n";
+
+    // ====== 多线程 pop ======
+    std::atomic<int> pop_count{0};
+    std::mutex cout_mutex;
+
+    std::vector<std::thread> consumers;
+    for (int i = 0; i < N_THREADS; ++i) {
+        consumers.emplace_back([&] {
+            int val;
+            while (pop_count.fetch_add(1) < TOTAL) {
+                if (stack.pop(val)) {
+                    // pop 成功
+                } else {
+                    break;  // 栈空
+                }
+            }
+        });
+    }
+    for (auto& t : consumers) t.join();
+
+    std::cout << "All pops done. (elements expected: " << TOTAL << ")\n";
+    std::cout << "\n注意：这个栈在 push/pop 在并发下正确工作，\n";
+    std::cout << "但 delete 已注释掉——因为存在 ABA 问题！\n";
+    std::cout << "解决方案：hazard pointer / epoch-based RCU / atomic<shared_ptr>（C++20）\n";
+
+    return 0;
+}
+```
+
+---
+
+#### 实验 8：happens-before 侦探游戏
+
+通过 mutex、atomic、thread join 建立 happens-before 关系，然后用断言验证。
+
+```cpp
+// exp_happens_before.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_happens_before.cpp -o exp_happens_before
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <cassert>
+
+std::mutex cout_mutex;
+#define LOG(msg) do { \
+    std::lock_guard<std::mutex> _lg(cout_mutex); \
+    std::cout << msg << std::endl; \
+} while(0)
+
+int main() {
+    // ====== happens-before 链 1：mutex lock/unlock ======
+    {
+        std::mutex m;
+        int shared = 0;
+
+        std::thread t1([&] {
+            shared = 100;              // (A)
+            {
+                std::lock_guard lg(m);  // (B) lock
+                // 临界区
+            }                           // (C) unlock → happens-before → (D)
+        });
+
+        t1.join();  // t1 的所有操作 happens-before join 返回
+
+        std::thread t2([&] {
+            std::lock_guard lg(m);      // (D) lock → 能看到 (C) 之前的所有写
+            // shared 可能是 100（如果 t1 的锁在 t2 之前释放）
+            // 也可能是 0（如果 t2 先获得锁）
+            LOG("shared via mutex: " + std::to_string(shared));
+        });
+
+        t2.join();
+    }
+
+    // ====== happens-before 链 2：release/acquire ======
+    {
+        std::atomic<bool> flag{false};
+        int data = 0;
+
+        std::thread t1([&] {
+            data = 42;                                         // (E)
+            flag.store(true, std::memory_order_release);       // (F) release
+            // (E) happens-before (F) [sequenced-before, 同线程]
+        });
+
+        std::thread t2([&] {
+            while (!flag.load(std::memory_order_acquire));     // (G) acquire
+            // (F) synchronizes-with (G) [因为 release/acquire 配对]
+            // 所以 (E) happens-before (G) [通过传递]
+            // 所以 (G) 之后一定能看到 (E) 的结果
+            assert(data == 42);  // 绝对不会触发
+            LOG("data via release/acquire: " + std::to_string(data));
+        });
+
+        t1.join(); t2.join();
+    }
+
+    // ====== happens-before 链 3：thread join ======
+    {
+        int result = 0;
+        std::thread t([&] {
+            result = 999;  // (H)
+        });
+        t.join();           // (I) — (H) happens-before (I)
+        // join 返回后，result 一定等于 999
+        assert(result == 999);  // 绝对不会触发
+        LOG("result via join: " + std::to_string(result));
+    }
+
+    LOG("\n所有断言都通过了——happens-before 关系保证了这些操作的可见性。");
+    LOG("如果去掉同步机制（不用 mutex、不用 release/acquire、不 join），");
+    LOG("这些断言就可能失败——数据竞赛、cppreference 称之为未定义行为。");
+
+    return 0;
+}
+```
+
+---
+
+#### 实验 9：async / future / promise / latch / barrier
+
+演示 C++11/20 的异步基础设施。
+
+```cpp
+// exp_async_future.cpp
+// 编译: g++ -std=c++20 -pthread -O2 exp_async_future.cpp -o exp_async_future
+// （latch/barrier 需要 C++20）
+#include <iostream>
+#include <future>
+#include <thread>
+#include <latch>     // C++20
+#include <barrier>   // C++20
+#include <vector>
+#include <chrono>
+
+// ====== async + future ======
+void demo_async_future() {
+    std::cout << "=== async + future ===\n";
+
+    // launch::async: 保证在新线程中执行
+    auto future = std::async(std::launch::async, [] {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        return 42;
+    });
+
+    std::cout << "Waiting for result...\n";
+    int result = future.get();  // 阻塞直到完成
+    std::cout << "Result: " << result << "\n\n";
+}
+
+// ====== promise + future ======
+void demo_promise_future() {
+    std::cout << "=== promise + future ===\n";
+
+    std::promise<std::string> p;
+    std::future<std::string> f = p.get_future();
+
+    std::thread worker([&p] {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        p.set_value("hello from worker");  // 设置结果到 promise
+        // 也可以 p.set_exception(...) 传递异常
+    });
+
+    std::cout << "Received: " << f.get() << "\n";
+    worker.join();
+    std::cout << "\n";
+}
+
+// ====== shared_future — 一个 future 多次获取 ======
+void demo_shared_future() {
+    std::cout << "=== shared_future ===\n";
+
+    std::promise<int> p;
+    std::shared_future<int> sf = p.get_future().share();  // future → shared_future
+
+    auto reader = [sf](int id) {
+        int val = sf.get();  // 多个线程都可以 get()
+        std::cout << "  Thread " << id << " got: " << val << "\n";
+    };
+
+    std::thread t1(reader, 1), t2(reader, 2), t3(reader, 3);
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    p.set_value(100);  // 所有等待的 shared_future 都被通知
+    t1.join(); t2.join(); t3.join();
+    std::cout << "\n";
+}
+
+// ====== latch：一次性同步点 ======
+void demo_latch() {
+    std::cout << "=== latch (C++20) ===\n";
+
+    constexpr int N_WORKERS = 5;
+    std::latch start_gate{1};       // 等 1 个信号后开始
+    std::latch done_gate{N_WORKERS}; // 等 N_WORKERS 个 worker 都完成
+
+    auto worker = [&](int id) {
+        start_gate.wait();  // 等待起跑信号
+        std::cout << "  Worker " << id << " started\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(id * 20));
+        std::cout << "  Worker " << id << " done\n";
+        done_gate.count_down();  // 报告完成
+    };
+
+    std::vector<std::thread> workers;
+    for (int i = 0; i < N_WORKERS; ++i)
+        workers.emplace_back(worker, i);
+
+    std::cout << "Ready... Go!\n";
+    start_gate.count_down();  // 所有 worker 同时起跑
+
+    done_gate.wait();  // 等所有 worker 完成
+    std::cout << "All workers done!\n";
+
+    for (auto& t : workers) t.join();
+    std::cout << "\n";
+}
+
+// ====== barrier：可复用的同步点 ======
+void demo_barrier() {
+    std::cout << "=== barrier (C++20) ===\n";
+
+    constexpr int N_THREADS = 4;
+    constexpr int N_ROUNDS = 3;
+
+    // barrier 在每次所有线程到达后执行回调，然后重置
+    std::barrier sync_point(N_THREADS, [round = 0]() mutable {
+        std::cout << "  [All threads reached barrier for round " << round++ << "]\n";
+    });
+
+    auto worker = [&](int id) {
+        for (int round = 0; round < N_ROUNDS; ++round) {
+            // 模拟每轮做不同量的工作
+            std::this_thread::sleep_for(std::chrono::milliseconds((id + 1) * 30));
+            std::cout << "  Thread " << id << " reached barrier (round " << round << ")\n";
+            sync_point.arrive_and_wait();  // 到达并等待所有线程
+        }
+    };
+
+    std::vector<std::thread> threads;
+    for (int i = 0; i < N_THREADS; ++i)
+        threads.emplace_back(worker, i);
+    for (auto& t : threads) t.join();
+
+    std::cout << "All rounds complete.\n";
+}
+
+int main() {
+    demo_async_future();
+    demo_promise_future();
+    demo_shared_future();
+    demo_latch();
+    demo_barrier();
+    return 0;
+}
+```
+
+---
+
+#### 实验 10：综合 — 自己动手测
+
+把前面的知识点串起来，用 `#define` 切换不同的配置做对比实验。
+
+```cpp
+// exp_bench_all.cpp
+// 编译: g++ -std=c++17 -pthread -O2 exp_bench_all.cpp -o exp_bench_all
+// 这个实验让你一键对比：无锁 vs mutex vs atomic (不同 memory order)
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <vector>
+#include <chrono>
+#include <string>
+
+constexpr int N_THREADS = 4;
+constexpr int64_t N_OPS = 10000000;  // 每线程 1000 万次
+
+// ====== 方案 1：mutex ======
+double bench_mutex() {
+    std::mutex m;
+    int64_t counter = 0;
+
+    auto worker = [&] {
+        for (int64_t i = 0; i < N_OPS; ++i) {
+            std::lock_guard<std::mutex> lg(m);
+            ++counter;  // 被保护的普通变量
+        }
+    };
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<std::thread> threads;
+    for (int i = 0; i < N_THREADS; ++i)
+        threads.emplace_back(worker);
+    for (auto& t : threads) t.join();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "  counter = " << counter
+              << " (expected " << N_THREADS * N_OPS << ")\n";
+    return std::chrono::duration<double, std::milli>(end - start).count();
+}
+
+// ====== 方案 2：atomic (seq_cst, 默认) ======
+double bench_atomic_seq_cst() {
+    std::atomic<int64_t> counter{0};
+
+    auto worker = [&] {
+        for (int64_t i = 0; i < N_OPS; ++i) {
+            counter.fetch_add(1, std::memory_order_seq_cst);
+        }
+    };
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<std::thread> threads;
+    for (int i = 0; i < N_THREADS; ++i)
+        threads.emplace_back(worker);
+    for (auto& t : threads) t.join();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "  counter = " << counter.load()
+              << " (expected " << N_THREADS * N_OPS << ")\n";
+    return std::chrono::duration<double, std::milli>(end - start).count();
+}
+
+// ====== 方案 3：atomic (relaxed) ======
+double bench_atomic_relaxed() {
+    std::atomic<int64_t> counter{0};
+
+    auto worker = [&] {
+        for (int64_t i = 0; i < N_OPS; ++i) {
+            counter.fetch_add(1, std::memory_order_relaxed);
+        }
+    };
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<std::thread> threads;
+    for (int i = 0; i < N_THREADS; ++i)
+        threads.emplace_back(worker);
+    for (auto& t : threads) t.join();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "  counter = " << counter.load()
+              << " (expected " << N_THREADS * N_OPS << ")\n";
+    return std::chrono::duration<double, std::milli>(end - start).count();
+}
+
+// ====== 方案 4：atomic 但用 local accumulation（减少竞争） ======
+double bench_atomic_local_acc() {
+    std::atomic<int64_t> counter{0};
+
+    auto worker = [&] {
+        int64_t local = 0;  // 先在本地累加
+        for (int64_t i = 0; i < N_OPS; ++i) {
+            ++local;
+        }
+        counter.fetch_add(local, std::memory_order_relaxed);  // 最后一次性加
+    };
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<std::thread> threads;
+    for (int i = 0; i < N_THREADS; ++i)
+        threads.emplace_back(worker);
+    for (auto& t : threads) t.join();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "  counter = " << counter.load()
+              << " (expected " << N_THREADS * N_OPS << ")\n";
+    return std::chrono::duration<double, std::milli>(end - start).count();
+}
+
+int main() {
+    std::cout << "Benchmark: " << N_THREADS << " threads, "
+              << N_OPS << " increments each\n\n";
+
+    auto print = [](const std::string& name, double ms) {
+        std::cout << "[" << name << "] " << ms << " ms\n";
+    };
+
+    print("mutex        ", bench_mutex());
+    print("atomic seqcst", bench_atomic_seq_cst());
+    print("atomic relaxed", bench_atomic_relaxed());
+    print("local acc    ", bench_atomic_local_acc());
+
+    std::cout << "\n分析：\n";
+    std::cout << "- mutex: 每次加都加锁，开销最高\n";
+    std::cout << "- seq_cst: 无需内核态切换，比 mutex 快，但每次有内存屏障\n";
+    std::cout << "- relaxed: 无内存屏障，最快——适合纯计数器\n";
+    std::cout << "- local accumulation: 极少竞争，吞吐量取决于本地计算速度\n";
+
+    return 0;
+}
+```
+
+**预期结果**（相对速度）：
+```
+local acc > atomic relaxed > atomic seq_cst > mutex
+```
+
+---
+
+#### 实验 11（选做）：ThreadSanitizer 实战
+
+ThreadSanitizer 是检测数据竞争的利器。用实验 3 的代码跑一下：
+
+```bash
+# 用 ThreadSanitizer 编译和运行
+g++ -std=c++17 -pthread -O2 -fsanitize=thread -g exp_atomic_basic.cpp -o tsan_test
+./tsan_test 2>&1 | head -50
+```
+
+你会看到类似这样的输出（对于非原子版本）：
+```
+WARNING: ThreadSanitizer: data race (pid=12345)
+  Write of size 4 at 0x... by thread T2:
+    #0 worker() exp_atomic_basic.cpp:17
+  Previous write of size 4 at 0x... by thread T1:
+    #0 worker() exp_atomic_basic.cpp:17
+```
+
+而对于 `fetch_add` 版本——静默通过，没有 data race。
+
+---
+
+> **实验总结**：这些实验覆盖了第八章中的所有核心概念。建议按顺序跑一遍，每次改动一个小参数（如 memory_order、线程数）观察变化。如果你在 x86 上跑某些内存序实验发现 " 怎么都是对的 "，不要疑惑——这正是 x86 强内存模型的特点。想办法在 ARM 设备（树莓派 / Apple Silicon）上再跑一遍，你会看到明显差异。
+
 ---
 
 ## 九、C++ 容易翻车的点
