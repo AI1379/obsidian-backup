@@ -251,3 +251,105 @@ AI方向教授：
 - NTU CCDS：https://www.ntu.edu.sg/computing
 - NTU Faculty：https://www.ntu.edu.sg/computing/our-faculty
 - NTU 研究：https://www.ntu.edu.sg/computing/research
+
+---
+
+## 七、欧洲高校（法国）
+
+> 添加时间：2026-06-16 17:04
+> 背景：旅行者了解到巴黎综合理工学院和巴黎高师可能有合作项目，但对欧洲整体LLM实力有疑虑
+
+### 巴黎综合理工学院 (École Polytechnique / l'X)
+
+- 定位：法国最顶尖的工程师学院（Grande École），巴黎萨克雷大学成员
+- 计算机实验室：LIX，与 INRIA 联合运作
+- NLP方向：信息检索、机器翻译、对话系统
+- 与 FAIR Paris（Meta AI 巴黎）合作密切 — FAIR Paris 在多语言模型、低资源语言等方向很强
+- 硕士项目：MVA (Mathématiques, Vision, Apprentissage) — 声誉很高
+- 博士：通常与萨克雷大学联合授予，职位制（有工资+社保+免学费）
+- 学费（工程师项目）：国际生约 €15,000-18,000/年
+- 特点：军事院校传统，偏工程，与工业界联系比ENS更紧
+
+### 巴黎高等师范学院 (ENS)
+
+- 定位：法国最精英的人文与理学研究机构，菲尔兹奖诺奖高产
+- 计算机科学系：DIENS，与 INRIA 联合实验室
+- NLP方向：计算语言学、形式语义学、机器学习理论
+- 与 FAIR Paris 合作密切，有多个 ERC 项目
+- 招生：国际生通过 International Selection 考试
+- 博士：通常与 PSL 大学联合授予，职位制
+
+### 法国PhD体系特点
+
+- **职位制**：不是申请制，是应聘制。导师拿到经费后发招聘广告，需要面试
+- 优势：有工资+社保+免学费，3-4年即可完成
+- 劣势：流程比英美更长，需要等合适的职位放出来
+- Mistral AI 连接：联合创始人 Arthur Mensch 的路径是 Polytechnique → ENS → INRIA → DeepMind → Mistral
+
+---
+
+## 八、欧洲在LLM方向的整体评估
+
+### 核心判断
+
+欧洲在 LLM 这个具体方向上的存在感确实很低。LLM 的核心叙事被美国和中国的几个头部团队瓜分：
+- 美国：OpenAI、Anthropic、Google、Meta（Llama）
+- 中国：DeepSeek、通义千问、GLM（清华）、字节Seed
+- 欧洲：Mistral AI 几乎是唯一的例外 — 而它是一家初创公司，不是高校
+
+### ENS 和 Polytechnique 的真实强项
+
+- ENS 的数学功底世界顶级，但 CS/AI 传统偏理论：优化理论、统计学习理论、形式化方法
+- 这些是 LLM 的"地基"，但**不是 LLM 的"大厦"**
+- 能培养理解 transformer 为什么收敛的人，但不太可能培养训练千亿参数模型的人
+- Polytechnique 偏工程，但最强方向也是计算数学、物理模拟，不是 NLP/LLM
+
+### 三条路径判断
+
+| 目标 | 推荐路径 |
+|------|----------|
+| 在 LLM 领域做出有影响力的工作 | 美国顶级校 > 中国清北/复旦 > 新加坡NUS > 香港HKUST > 欧洲 |
+| 打好理论基础，长期做AI研究 | ENS的数学功底是世界最好的跳板之一，但周期长 |
+| 性价比最高的PhD路径 | 欧洲PhD职位制（3-4年，有工资+社保），但LLM方向选择面窄 |
+
+### 一个可能的例外：英国
+
+- 剑桥 MILES 组 — NLP 方向强
+- 爱丁堡 NLP 组 — 欧洲老牌
+- UCL NLP 组 — 伦敦核心
+- DeepMind London — 很多PhD联合培养
+- 英国问题：PhD奖学金对国际学生极少，自费不现实
+
+### 法国路径的现实连接
+
+如果想通过法国高校进入 LLM 前沿：
+- ENS/Polytechnique → FAIR Paris 实习 → Mistral AI 是一条存在的路径
+- 但比较绕，不如直接去Mistral所在的生态（甚至直接申请Mistral实习）
+- 那个"合作项目"具体是什么形式（双学位/交换/带薪PhD）会极大影响这条路径的可行性
+
+---
+
+## 九、大二暑假调整建议（更新版）
+
+> 你已有 NLP 基础，但不足以形成 paper
+
+### 这个暑假可以做的最有价值的事
+
+1. **独立项目**（最推荐）
+   - 用开源 LLM 做 fine-tuning 实验
+   - 复现一篇感兴趣的论文
+   - 参与开源项目贡献代码
+   - 目标：产出一个可展示的 GitHub 仓库
+
+2. **系统补 LLM 前沿**
+   - Stanford CS224n (NLP with Deep Learning)
+   - Andrej Karpathy "Let's build GPT from scratch"
+   - HuggingFace NLP Course
+   - 目标：能读懂 ACL/EMNLP/NeurIPS 论文
+
+3. **准备语言考试**（如果考虑出国）
+   - 雅思/托福 + GRE
+
+4. **本校导师尝试**
+   - 虽然暑研来不及，但可以直接敲门问有没有可以远程参与的小任务
+   - 浙大CS的AI方向导师 — 哪怕只是读论文、跑实验
