@@ -68,6 +68,126 @@ $$\mathbb{Z}/m\mathbb{Z} \cong \prod_{i=1}^{r} \mathbb{Z}/m_i\mathbb{Z}$$
 
 ---
 
+## 广义中国剩余定理（EXCRT）
+
+普通 CRT 要求模数两两互素。若模数不互素，就进入常说的 **EXCRT** 情形。
+
+> 环论视角下，EXCRT 对应于理想不必互素时的相容性条件，参见 [[中国剩余定理]]。
+
+### 两个同余的判据
+
+> **定理（广义 CRT，两个模数）**：同余方程组
+> $$x \equiv a \pmod{m}, \quad x \equiv b \pmod{n}$$
+> 有解当且仅当
+> $$a \equiv b \pmod{\gcd(m,n)}.$$
+> 若有解，则解在模 $\operatorname{lcm}(m,n)$ 意义下唯一。
+
+### 成立性证明
+
+设 $d = \gcd(m,n)$。
+
+**必要性**：若存在 $x$ 使
+
+$$x \equiv a \pmod{m}, \quad x \equiv b \pmod{n},$$
+
+则 $m \mid (x-a)$ 且 $n \mid (x-b)$，从而 $d \mid (x-a)$ 且 $d \mid (x-b)$。两式相减得
+
+$$d \mid (a-b),$$
+
+即
+
+$$a \equiv b \pmod d.$$
+
+**充分性**：现设 $a \equiv b \pmod d$，即 $d \mid (b-a)$。写成
+
+$$b-a = dt.$$
+
+再设
+
+$$m = dm_1,\quad n = dn_1,\quad \gcd(m_1,n_1)=1.$$
+
+令
+
+$$x = a + mk,$$
+
+则第一个同余自动满足。要使第二个同余也成立，只需
+
+$$a + mk \equiv b \pmod n,$$
+
+即
+
+$$mk \equiv b-a \pmod n.$$
+
+代入上式分解，得到
+
+$$dm_1k \equiv dt \pmod{dn_1}.$$
+
+约去 $d$，化为
+
+$$m_1k \equiv t \pmod{n_1}.$$
+
+由于 $\gcd(m_1,n_1)=1$，$m_1$ 在模 $n_1$ 意义下可逆，因此此同余必有解。取一组解 $k$，便得到
+
+$$x = a + mk$$
+
+是原方程组的一组解。
+
+### 为什么唯一到最小公倍数
+
+若 $x_1,x_2$ 都是解，则
+
+$$x_1 \equiv x_2 \pmod m,\quad x_1 \equiv x_2 \pmod n.$$
+
+于是 $m \mid (x_1-x_2)$ 且 $n \mid (x_1-x_2)$，故
+
+$$\operatorname{lcm}(m,n) \mid (x_1-x_2).$$
+
+所以所有解构成一个模 $\operatorname{lcm}(m,n)$ 的剩余类。
+
+### 与算法中的 excrt 的关系
+
+算法里的 `excrt` 本质上就是反复使用上面的两模合并：
+
+把
+
+$$x \equiv a_1 \pmod{m_1}, \quad x \equiv a_2 \pmod{m_2}$$
+
+先合并成
+
+$$x \equiv A \pmod{\operatorname{lcm}(m_1,m_2)},$$
+
+再与第三个同余继续合并。每一步都要检查新旧余数之差是否被当前模数的最大公因数整除；若不整除，则整个方程组无解。
+
+> 也就是说，`excrt` 不是一个和 CRT 完全不同的定理，而是“非互素模数情形下的 CRT + 迭代合并算法”。
+
+### 例子
+
+例如
+
+$$x \equiv 5 \pmod{12}, \quad x \equiv 11 \pmod{18}.$$
+
+这里 $\gcd(12,18)=6$，而 $11-5=6$ 可被 $6$ 整除，所以有解。并且解唯一到模
+
+$$\operatorname{lcm}(12,18)=36.$$
+
+令 $x = 5 + 12k$，代入第二式：
+
+$$12k \equiv 6 \pmod{18}.$$
+
+约去 $6$，得
+
+$$2k \equiv 1 \pmod 3,$$
+
+所以 $k \equiv 2 \pmod 3$，于是
+
+$$x = 5 + 12(2+3t) = 29 + 36t.$$
+
+即
+
+$$x \equiv 29 \pmod{36}.$$
+
+---
+
 ## 欧拉函数
 
 ### 定义

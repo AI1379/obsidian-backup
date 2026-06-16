@@ -103,6 +103,16 @@ $c = 0$ 的情形确实不同：$\sum_{a+b=0} \chi(a)\eta(b) = \eta(-1)\sum_a (\
 
 ---
 
+
+### 与 Jacobi 符号的区分
+
+这里的 [[雅可比符号与勒让德符号|Jacobi 符号]] $\left(\frac{a}{n}\right)$ 与 **Jacobi 和** $J(\chi,\eta)$ 不是同一个概念。
+
+- Jacobi 符号是二次剩余理论里的符号函数，是 Legendre 符号对正奇数模的推广。
+- Jacobi 和是有限域上乘法特征的和，核心对象是特征 $\chi,\eta$ 而不是合数模上的符号。
+
+二者名字相同，是因为它们都出现在同一批经典数论主题中；真正的直接联系通常发生在二次特征 $\chi(x)=\left(\frac{x}{p}\right)$ 这一层面。
+
 ## 核心公式：$J(\chi, \eta) = \frac{g(\chi)\,g(\eta)}{g(\chi\eta)}$
 
 这是 Gauss 和与 Jacobi 和之间最重要的关系。我们给出两个证明：一个简短的直接计算，一个基于 Fourier 分析。
