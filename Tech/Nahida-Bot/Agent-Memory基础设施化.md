@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # Agent Memory 基础设施化思路
 
 > **日期**: 2026-04-29

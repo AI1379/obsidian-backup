@@ -1,17 +1,59 @@
-## Recent Notes
+---
+tags: [journal]
+---
+
+# Dashboard
+
+## 最近更新的笔记
 
 ```dataview
-TABLE file.ctime AS "Create time", file.tags AS "Tags" FROM "" WHERE file.cday >= date(now) - dur(7 days) SORT file.cday DESC
+TABLE file.mtime AS "更新时间", file.tags AS "标签"
+FROM -"Templates"
+SORT file.mtime DESC
+LIMIT 10
 ```
 
-## TODOs
+## 最近 7 天新建
 
-### LLM
+```dataview
+TABLE file.ctime AS "创建时间", file.tags AS "标签"
+FROM ""
+WHERE file.cday >= date(now) - dur(7 days)
+SORT file.cday DESC
+```
+
+## 待办事项
 
 ```dataview
 TASK
-FROM "LLM"
+FROM -"Templates"
 WHERE !completed
-SORT due ASC
+SORT file.mtime DESC
+LIMIT 30
+```
 
+## 课程笔记
+
+```dataview
+LIST
+FROM "Courses"
+SORT file.name ASC
+```
+
+## 数学笔记
+
+```dataview
+LIST
+FROM "Math"
+SORT file.name ASC
+```
+
+## 近期日记
+
+```dataview
+LIST
+FROM "Journal"
+WHERE file.name != "Dashboard"
+SORT file.name DESC
+LIMIT 5
 ```

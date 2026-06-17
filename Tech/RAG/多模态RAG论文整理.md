@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/rag]
+---
+
 # 多模态 RAG & Embedding 论文整理
 
 ## 问题背景

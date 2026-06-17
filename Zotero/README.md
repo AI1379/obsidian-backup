@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # Zotero
 
 文献管理。当前全部为 RAG 方向论文。

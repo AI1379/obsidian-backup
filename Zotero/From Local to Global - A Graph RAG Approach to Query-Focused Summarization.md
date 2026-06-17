@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # From Local to Global: A Graph RAG Approach to Query-Focused Summarization
 
 ## 📒 引用

@@ -1,3 +1,7 @@
+---
+tags: [misc, misc/interview]
+---
+
 # 面试
 
 ## 米哈游 2026 春招/ — 8 篇

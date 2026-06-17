@@ -1,8 +1,9 @@
 ---
+
 title: Cauchy XNet with AttnRes
 created: 2026-03-27
 source: Cherry Studio
-tags:
+tags: [tech, tech/srtp]
 ---
 # Cauchy XNet + AttnRes
 

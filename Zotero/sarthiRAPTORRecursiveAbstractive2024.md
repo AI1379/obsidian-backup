@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval
 
 ## 📒 引用

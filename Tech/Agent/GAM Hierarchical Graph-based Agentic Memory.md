@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/agent]
+---
+
 # GAM: Hierarchical Graph-based Agentic Memory for LLM Agents
 
 ## 论文信息

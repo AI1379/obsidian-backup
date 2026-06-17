@@ -1,3 +1,7 @@
+---
+tags: [tech]
+---
+
 # The Geometry of Knowing: From Possibilistic Ignorance to Probabilistic Certainty
 
 ## 论文信息

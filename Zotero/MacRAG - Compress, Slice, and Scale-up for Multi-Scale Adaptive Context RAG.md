@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # MacRAG: Compress, Slice, and Scale-up for Multi-Scale Adaptive Context RAG
 
 ## 📒 引用

@@ -1,3 +1,7 @@
+---
+tags: [misc]
+---
+
 # Misc
 
 杂项：不属 Tech/Courses/Math 等核心分类的散落内容。

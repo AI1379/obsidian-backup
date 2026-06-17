@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # HIRAG: Hierarchical-Thought Instruction-Tuning Retrieval-Augmented Generation
 
 ## 📒 引用

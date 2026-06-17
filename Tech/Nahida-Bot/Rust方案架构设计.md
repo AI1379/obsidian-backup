@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # Rust AI Agent Bot 框架架构设计
 
 > **代号**: IronClaw（暂定）

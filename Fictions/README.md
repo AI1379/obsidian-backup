@@ -1,3 +1,7 @@
+---
+tags: [fiction]
+---
+
 # Fictions
 
 同人创作。

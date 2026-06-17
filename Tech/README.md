@@ -1,3 +1,7 @@
+---
+tags: [tech]
+---
+
 # Tech
 
 技术探索与工程实战。已合并原 Research/，涵盖 Agent、RAG、LLM 等研究方向和命令速查、开发配置等工程内容。

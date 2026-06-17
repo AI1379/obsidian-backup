@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # Dream Learning 与 Hermes 自我进化：技术原理分析
 
 > **日期**: 2026-04-29

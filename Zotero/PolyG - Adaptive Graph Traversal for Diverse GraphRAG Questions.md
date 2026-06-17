@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # PolyG: Adaptive Graph Traversal for Diverse GraphRAG Questions
 
 ## 📒 引用

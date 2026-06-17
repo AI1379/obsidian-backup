@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # Retrieval-Augmented Generation with Hierarchical Knowledge
 
 ## 📒 引用

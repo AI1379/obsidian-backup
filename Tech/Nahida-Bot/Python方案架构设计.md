@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # Python AI Agent Bot 框架 — 架构设计文档
 
 > **项目代号**: NahidaBot（暂定）

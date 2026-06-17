@@ -1,3 +1,7 @@
+---
+tags: [paper, paper/rag]
+---
+
 # The Power of Noise: Redefining Retrieval for RAG Systems
 
 ## 📒 引用

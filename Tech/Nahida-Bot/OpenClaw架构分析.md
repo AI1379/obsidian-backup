@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # OpenClaw 核心架构深度分析报告
 
 > **分析日期**: 2026-04-06  

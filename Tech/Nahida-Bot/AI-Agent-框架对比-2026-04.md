@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/nahida-bot]
+---
+
 # AI Agent 框架对比调研报告
 
 > 调研时间：2026-04-29 | 调研人：纳西妲

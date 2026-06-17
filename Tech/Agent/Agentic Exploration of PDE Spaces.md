@@ -1,3 +1,7 @@
+---
+tags: [tech, tech/agent]
+---
+
 # Agentic Exploration of PDE Spaces using Latent Foundation Models
 
 ## 论文信息
