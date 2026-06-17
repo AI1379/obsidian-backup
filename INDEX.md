@@ -1,48 +1,21 @@
 # 📚 Vault Index
 
-> [[Journal/Dashboard|Dashboard]] ｜ 标签体系：`course` `math` `tech` `misc` `fiction` `paper` `journal`
+> Dashboard → [[Journal/Dashboard|待办 & 最近动态]]
 
-## 最近更新
-
-```dataview
-TABLE file.mtime AS "修改时间", file.tags AS "标签"
-FROM -"Templates"
-SORT file.mtime DESC
-LIMIT 8
-```
-
-## 目录总览
+## 目录
 
 | 目录 | 用途 |
 |------|------|
-| [[Math/README\|Math]] | 数学学科笔记（代数/ODE/数论/分析） |
-| [[Tech/README\|Tech]] | 技术探索与工程实战（Agent/RAG/LLM/命令速查/开发配置） |
-| [[Courses/README\|Courses]] | 课堂笔记，5 门课 |
+| [[Courses/README\|Courses]] | 课堂笔记（初等数论/复变函数/点集拓扑/实变函数/数值代数） |
+| [[Math/README\|Math]] | 数学笔记（代数/ODE/数论/分析） |
+| [[Tech/README\|Tech]] | 技术探索与工程（Agent/RAG/Nahida-Bot/LLM/命令速查/配置） |
+| [[Misc/README\|Misc]] | 杂项（面试/项目点子/学生会/数模） |
 | [[Fictions/README\|Fictions]] | 同人创作 |
-| [[Zotero/README\|Zotero]] | 文献管理（RAG 向） |
-| [[Templates/README\|Templates]] | 模板 |
-| [[Misc/README\|Misc]] | 杂项（面试准备、项目点子、学生会、数模） |
+| [[Zotero/README\|Zotero]] | Zotero 文献管理 |
 | [[Journal/Dashboard\|Journal]] | 日记 |
 
-## 按标签浏览
+## 标签
 
-### course（课堂笔记）
-```dataview
-LIST
-FROM #course
-SORT file.name ASC
-```
+`#course` `#math` `#tech` `#misc` `#fiction` `#paper` `#journal`
 
-### math（数学）
-```dataview
-LIST
-FROM #math
-SORT file.name ASC
-```
-
-### tech（技术）
-```dataview
-LIST
-FROM #tech
-SORT file.name ASC
-```
+在 Obsidian 搜索框输入 `#tech/rag` 或 `#math/algebra` 即可按子标签筛选。

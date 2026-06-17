@@ -4,56 +4,38 @@ tags: [journal]
 
 # Dashboard
 
-## 最近更新的笔记
-
-```dataview
-TABLE file.mtime AS "更新时间", file.tags AS "标签"
-FROM -"Templates"
-SORT file.mtime DESC
-LIMIT 10
-```
-
-## 最近 7 天新建
-
-```dataview
-TABLE file.ctime AS "创建时间", file.tags AS "标签"
-FROM ""
-WHERE file.cday >= date(now) - dur(7 days)
-SORT file.cday DESC
-```
-
-## 待办事项
-
-```dataview
-TASK
-FROM -"Templates"
-WHERE !completed
-SORT file.mtime DESC
-LIMIT 30
-```
-
-## 课程笔记
-
-```dataview
-LIST
-FROM "Courses"
-SORT file.name ASC
-```
-
-## 数学笔记
-
-```dataview
-LIST
-FROM "Math"
-SORT file.name ASC
-```
-
-## 近期日记
+## 今日
 
 ```dataview
 LIST
 FROM "Journal"
-WHERE file.name != "Dashboard"
-SORT file.name DESC
-LIMIT 5
+WHERE file.name = dateformat(date(now), "yyyy-MM-dd")
 ```
+
+> 没有今天的日记？用 `Templates/Journal` 模板新建一篇。
+
+## 待办
+
+```dataview
+TASK
+FROM "Courses" OR "Math" OR "Tech" OR "Misc"
+WHERE !completed
+SORT file.mtime DESC
+LIMIT 20
+```
+
+## 最近修改
+
+```dataview
+TABLE file.mtime AS "时间"
+FROM "Courses" OR "Math" OR "Tech" OR "Misc"
+SORT file.mtime DESC
+LIMIT 8
+```
+
+## 快捷入口
+
+- [[Courses/期末复习计划|期末复习计划]]
+- [[Tech/Agent/|Agent 调研]] · [[Tech/RAG/|RAG]] · [[Tech/Nahida-Bot/|Nahida-Bot]]
+- [[Misc/Interviews/面试准备|面试准备]]
+- [[Fictions/|同人创作]]
