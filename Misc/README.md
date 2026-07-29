@@ -6,6 +6,9 @@ tags: [misc]
 
 杂项：不属 Tech/Courses/Math 等核心分类的散落内容。
 
+## Graduate-Planning/ — 升学规划
+[[Graduate-Planning/README|📋 总览]] · [[Graduate-Planning/01-路线总览与总体判断|路线总览]] · [[Graduate-Planning/02-方向定位|方向定位]] · [[Graduate-Planning/03-各地区选项分析|各地区选项]] · [[Graduate-Planning/04-导师名单|导师名单]] · [[Graduate-Planning/05-行动计划与时间线|行动计划]]
+
 ## Interviews/ — 米哈游 2026 春招
 [[面试准备]] · [[简历技术栈八股提纲]]
 分项：[[计网相关]] · [[计组相关]] · [[操作系统与并发相关]]
