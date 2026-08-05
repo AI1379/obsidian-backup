@@ -1,5 +1,7 @@
 ---
-tags: [paper]
+tags:
+  - paper
+citekey: "{{citekey}}"
 ---
 
 # {{title}}
