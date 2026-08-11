@@ -12,6 +12,7 @@
 | [[Misc/README\|Misc]] | 杂项（升学规划/面试/项目点子/学生会/数模） |
 | [[Fictions/README\|Fictions]] | 同人创作 |
 | [[Zotero/README\|Zotero]] | Zotero 文献管理 |
+| [[IELTS/README\|IELTS]] | 雅思备考（听说读写/词汇） |
 | [[Journal/Dashboard\|Journal]] | 日记 |
 
 ## 标签
