@@ -1,0 +1,227 @@
+% !TEX program = xelatex
+\documentclass[12pt]{ctexart}
+% 编译方式：xelatex Fisher-R1-Report-Article.tex
+
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Fisher-R1: Training LLM Agents\\for Reliable Hypothesis Testing}\\[6pt]
+  {\large 论文阅读笔记}\\[4pt]
+  arXiv:2608.07437, 2026
+\end{center}
+
+\medskip
+
+% ============================================================
+\section{Motivation}
+
+$p$-value 依赖于所选的 statistical model，错误的 method selection 会导致
+错误的 conclusion。现有通用模型（如 GPT-5.4）可以可靠地查看数据、生成
+代码、执行分析、输出报告，但其选择的统计模型本身未必可靠；而现有
+benchmark 很少评估``报告的 $p$-value 在数据假设下是否统计有效''，无法
+捕捉这一 failure mode。
+
+论文开篇的例子（Figure 1）：数据中存在两个 high-leverage outliers，同一
+份数据上 linear regression 给出 $p < 2.2\times 10^{-16}$，而 Spearman
+rank test 给出 $p = 0.085$。GPT-5.4 看到了 outlier、算过 Spearman、
+知道 linear regression 有 warning signs，但最终仍选择 linear
+regression；Fisher-R1 则选择 rank test。即：
+
+\begin{center}
+  \fbox{\textbf{Correct execution $\neq$ valid statistical inference}}
+\end{center}
+
+% ============================================================
+\section{P-Bench}
+
+\subsection{测什么}
+
+每个任务的输入只有：一个描述科学问题的分析请求 + 一个 CSV 数据集，
+\textbf{不告知模型应使用何种统计方法}。模型需要独立完成完整链条：
+\[
+  \text{question}
+  \rightarrow \text{data exploration}
+  \rightarrow \text{method selection}
+  \rightarrow \text{execute R}
+  \rightarrow p\text{-value}
+  \rightarrow \text{decision}.
+\]
+这与 StatQA 一类选择题 benchmark 的核心区别是：不是从选项中挑方法，
+而是 end-to-end 的自主决策与执行，且同时评估 $p$-value 与 conclusion
+的统计有效性。
+
+\subsection{构造与 ground truth}
+
+共 $203\ \text{Easy} + 222\ \text{Hard} = 425$ 个任务，来自经济学、
+生物学、医学领域的真实论文及其数据集，覆盖 17 类 hypothesis-testing
+methods（$t$-test、$\chi^2$、OLS、Fisher exact，以及 Cox PH、IV/2SLS、
+mixed effects、Tobit 等）。Hard 子集包含 statistical traps：model
+specification、assumption checking、outliers、heteroskedasticity、
+clustered observations 等。
+
+答案不是从论文文本里抽一个 $p$-value，而是来自 canonical analysis 的
+真实执行：
+\[
+  \text{paper + dataset + analysis code}
+  \;\rightarrow\; \text{重新运行}
+  \;\rightarrow\; \text{execution log}
+  \;\rightarrow\; \text{提取 } p^{*}\text{ 与 conclusion}
+  \;\rightarrow\; \text{专家审核}.
+\]
+即 keys 由 canonical reference code 计算并经专家检查，可执行、可复现。
+
+% ============================================================
+\section{Fisher-R1}
+
+方法主线：
+\[
+  \text{Synthetic executable tasks}
+  \rightarrow \text{expert SFT warm start}
+  \rightarrow \text{outcome-verifiable RL}.
+\]
+
+\subsection{六维合成任务空间}
+
+合成任务来自六维 task taxonomy：
+\[
+  M \times S_m \times N \times E \times P \times K
+\]
+
+\begin{center}
+\begin{tabular}{c l}
+  \toprule
+  维度 & 含义 \\
+  \midrule
+  $M$   & statistical method \\
+  $S_m$ & scenario（应用场景） \\
+  $N$   & sample size \\
+  $E$   & effect size（null / borderline / medium） \\
+  $P$   & prompt style（hint / non-hint） \\
+  $K$   & random seed \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+训练空间包括 27 种 statistical methods、每种 5--7 个场景、多种 $N$ 与
+effect size、hint/non-hint prompt，共合成 8642 个任务。每个坐标点产生
+一个可执行的统计任务，DGP 生成 dataset.csv，同时用 canonical method
+运行得到 $p^{*}$，因此天然具有 machine-verifiable 的 answer key。
+
+\subsection{SFT warm start}
+
+\begin{itemize}
+  \item Teacher 模型为 Claude Sonnet 4.6，按固定五步工作流生成轨迹：
+  \[
+    \text{EDA} \rightarrow \text{detailed EDA}
+    \rightarrow \text{assumption checking}
+    \rightarrow \text{method selection}
+    \rightarrow \text{conclusion};
+  \]
+  \item 共生成 4611 条 trajectory，筛选后保留 3851 条，格式化为
+        ReAct / CodeAct 格式，作为 Qwen（7B / 14B）的 SFT warm-start。
+\end{itemize}
+
+\subsection{Outcome-verifiable RL}
+
+因为 synthetic task 自带 verifiable ground truth $p^{*}$，可以定义
+reward（论文原式）：
+\[
+  R(o) = I_{\mathrm{valid}}(o)\left[w_p\, r_p(o) + w_c\, r_c(o)\right],
+  \qquad w_p = 0.9,\quad w_c = 0.1.
+\]
+
+\paragraph{$p$-value accuracy（权重 90\%）。}
+先做 $z$ 变换再比较：
+\[
+  z(p) = \Phi^{-1}\!\left(1 - \frac{p}{2}\right),
+  \qquad
+  r_p(o) = \exp\!\left(
+    -\frac{\bigl|\min\{z(\hat p),5\} - \min\{z(p^{*}),5\}\bigr|}{\sigma}
+  \right).
+\]
+不用 raw $p$-difference 的原因：$0.5\leftrightarrow 0.6$ 与
+$0.1\leftrightarrow 10^{-10}$ 的 $|\Delta p|$ 可能接近，但代表的
+statistical evidence 差距完全不同。
+
+\paragraph{Conclusion accuracy（权重 10\%）。}
+判断模型给出的 reject / fail-to-reject 决策是否正确。
+
+\paragraph{优化算法：DAPO。}
+\[
+  \hat A_i = \frac{R_i - \mu}{\sigma + \epsilon}
+\]
+即同一道题的多个 rollout 之间的相对质量：positive advantage 提高概率，
+negative advantage 降低概率，clip 保证单步更新不过于激进。训练时丢弃
+$\sigma_q^2 = 0$ 的 group（同组所有 rollout 的 reward 没有差异，
+不存在 relative advantage learning signal）。
+
+% ============================================================
+\section{实验结果}
+
+\paragraph{Post-training 提升巨大。}
+7B backbone 在 Hard Strict pass@1 上从 $13.2\%$ 提升到 $30.6\%$。
+
+\paragraph{14B 部分超越 GPT-5.4。}
+Fisher-R1-14B 在四个 Strict metric 中的三个超过 GPT-5.4，例如 Hard：
+$33.0\%$ vs.\ $30.5\%$。
+
+\paragraph{Raw vs.\ Strict gap。}
+GPT-5.4 在 Hard pass@1 上 $\text{Raw} = 58.3\%$，但
+$\text{Strict} = 30.5\%$。这说明模型经常能得到正确的显著方向，但无法
+可靠地产生正确的 statistical evidence，即 conclusion accuracy 会明显
+高估统计可靠性。
+
+% ============================================================
+\section{Ablation 与 Generalization}
+
+P-Hard Strict pass@1（\%）：
+
+\begin{center}
+\begin{tabular}{l c}
+  \toprule
+  设置 & pass@1 \\
+  \midrule
+  Backbone only          & 13.2 \\
+  + DAPO only            & 25.2 \\
+  + SFT only             & 14.3 \\
+  SFT + DAPO             & \textbf{30.6} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+SFT warm-start 与 outcome RL 是互补的。另外，训练任务全部是 synthetic
+而 P-Bench 任务来自真实论文；embedding nearest-neighbor 分析未发现
+P-Bench 任务与训练 prompt 存在 near-duplicate。
+
+% ============================================================
+\section{Limitations}
+
+\begin{itemize}
+  \item 目前只评估单个 hypothesis test，未覆盖 multiple-testing /
+        多阶段分析 workflow；
+  \item method choice 存在 uncertainty：同一问题常有多个 defensible 的
+        statistical procedures，reward 因此不直接奖励 method
+        correctness，而是以逼近 canonical $p^{*}$ 为目标——即
+        Fisher-R1 学到的是``产生接近专家 canonical analysis 的推断''，
+        而非``找到唯一正确的统计方法''；
+  \item 有的问题可能根本不存在单一的、可靠的假设检验方法。
+\end{itemize}
+
+% ============================================================
+\section{Takeaway}
+
+\begin{enumerate}
+  \item Executable analysis does not imply valid inference.
+  \item P-Bench 用可执行、专家级 ground truth 的真实任务暴露并量化了
+        这一 gap。
+  \item Synthetic verifiable post-training（SFT + outcome RL）可以大幅
+        提升统计推断的可靠性。
+\end{enumerate}
+
+\end{document}

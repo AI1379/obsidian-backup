@@ -1,0 +1,388 @@
+% !TEX program = xelatex
+\documentclass[aspectratio=169]{ctexbeamer}
+% 编译方式：xelatex Fisher-R1-Report.tex
+
+\usetheme{Madrid}
+\usecolortheme{whale}
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{footline}{size=\small}
+
+\usepackage{booktabs}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{array}
+
+\title[Fisher-R1 汇报]{Fisher-R1: Training LLM Agents\\for Reliable Hypothesis Testing}
+\subtitle{可执行的分析 $\neq$ 可靠的统计推断}
+\author{汇报人}
+\date{2026 年 8 月}
+
+\begin{document}
+
+% ============================================================
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ============================================================
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Motivation: 现有 LLM Agent 的失败模式}
+
+\begin{frame}{Opening: 一张图看懂全文（Figure 1 的故事）}
+  \textbf{场景}：数据中存在两个 \alert{high-leverage outliers}，同样的数据：
+  \begin{itemize}
+    \item Linear regression 给出 $p < 2.2\times 10^{-16}$（极显著）
+    \item Spearman rank test 给出 $p = 0.085$（不显著）
+  \end{itemize}
+
+  \medskip
+  \textbf{GPT-5.4 的表现}：
+  \begin{itemize}
+    \item 看到了 outlier
+    \item 算过 Spearman
+    \item 知道 linear regression 有 warning signs
+    \item \alert{最终仍然选择 linear regression}
+  \end{itemize}
+
+  \medskip
+  \textbf{Fisher-R1}：最终选择 rank test。
+
+  \medskip
+  \begin{beamercolorbox}[center, sep=8pt]{box}
+    \Large Correct execution $\neq$ valid statistical inference
+  \end{beamercolorbox}
+\end{frame}
+
+\begin{frame}{为什么需要专门的 Benchmark？}
+  \begin{itemize}
+    \item $p$-value 依赖于所选的 statistical model；错误的 method selection
+          导致错误的 conclusion。
+    \item 现有通用模型（GPT-5.4 等）可以可靠地看数据、生成代码、执行分析、
+          输出报告——\textbf{但所选统计模型本身未必可靠}。
+    \item 现有 benchmark 很少评估 ``报告的 $p$-value 在数据假设下是否统计有效''，
+          无法捕捉这一 failure mode。
+  \end{itemize}
+
+  \medskip
+  \begin{beamercolorbox}[center, sep=8pt]{box}
+    汇报重点排序：Motivation $>$ P-Bench $\approx$ Synthetic Verifiable Training
+    $>$ Experimental Findings $>$ Fisher Reward $>$ DAPO Details
+  \end{beamercolorbox}
+\end{frame}
+
+% ============================================================
+\section{P-Bench（一）：它到底测什么}
+
+\begin{frame}{P-Bench 评测的完整链条}
+  \textbf{输入}：一个科学问题的分析请求 + 一个 CSV 数据集。
+  \alert{不告知模型应使用何种统计方法。}
+
+  \medskip
+  模型需要独立完成完整链条：
+  \[
+    \boxed{\;\text{question} \rightarrow \text{data exploration}
+      \rightarrow \text{method selection} \rightarrow \text{execute R}
+      \rightarrow p\text{-value} \rightarrow \text{decision}\;}
+  \]
+
+  \medskip
+  \textbf{与 StatQA 类选择题 benchmark 的核心区别}：
+  \begin{itemize}
+    \item 不是从选项中挑方法，而是 end-to-end 自主决策 + 执行；
+    \item 评的不只是 ``方法选对没''，还有 $p$-value 与 conclusion 的统计有效性。
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{P-Bench（二）：构造与 Ground Truth 的可信性}
+
+\begin{frame}{425 个任务从哪里来？}
+  \[
+    203\ \text{Easy} + 222\ \text{Hard} = \boxed{425}
+  \]
+
+  \begin{itemize}
+    \item 来自经济学、生物学、医学领域的\textbf{真实论文}及其数据集；
+    \item 覆盖 \textbf{17 类}实际使用的 hypothesis-testing methods：
+      \begin{itemize}
+        \item 常规方法：$t$-test、$\chi^2$、OLS、Fisher exact 等
+        \item 高级方法：Cox PH、IV/2SLS、mixed effects、Tobit 等
+      \end{itemize}
+    \item Hard 不仅是 ``题目更复杂''，而是包含 statistical traps：
+      model specification、assumption checking、outliers、
+      heteroskedasticity、clustered observations。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ground truth 为什么可信？（关键一页）}
+  答案不是从论文文本里抽一个 $p$-value，而是来自
+  \alert{canonical analysis 的真实执行}：
+  \[
+    \text{paper + dataset + analysis code}
+    \;\rightarrow\; \text{重新运行}
+    \;\rightarrow\; \text{execution log}
+    \;\rightarrow\; \text{提取 } p^{*},\ \text{conclusion}
+    \;\rightarrow\; \text{专家审核}
+  \]
+
+  \medskip
+  \begin{itemize}
+    \item Keys 由 canonical reference code 计算得到，并经专家检查。
+    \item 应对质疑：``你说 GPT-5.4 错，凭什么 benchmark 的答案是对的？''
+          ——因为答案是\textbf{可执行、可复现的 canonical 代码}算出来的，
+          而非模型或人工的主观判断。
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Fisher-R1（一）：六维 Synthetic Task Space}
+
+\begin{frame}{Task Taxonomy：合成任务不是乱生成的}
+  \[
+    \boxed{\;M \times S_m \times N \times E \times P \times K\;}
+  \]
+  \begin{center}
+  \begin{tabular}{c l}
+    \toprule
+    维度 & 含义 \\
+    \midrule
+    $M$   & statistical method \\
+    $S_m$ & scenario（应用场景） \\
+    $N$   & sample size \\
+    $E$   & effect size（null / borderline / medium） \\
+    $P$   & prompt style（hint / non-hint） \\
+    $K$   & random seed \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \medskip
+  附录训练空间：\textbf{27 种} statistical methods、每种 5--7 个场景、
+  多种 $N$ 与 effect size、hint/non-hint prompt，共合成 \textbf{8642} 个任务。
+\end{frame}
+
+\begin{frame}{为什么 Synthetic 让 RL 成为可能}
+  每一个坐标点产生一个\textbf{可执行}的统计任务，自然得到
+  machine-verifiable answer key：
+  \[
+    \text{DGP} \rightarrow \text{dataset.csv}
+    \qquad\qquad
+    \text{dataset} \xrightarrow{\ \text{canonical method}\ } p^{*}
+  \]
+
+  \medskip
+  \begin{beamercolorbox}[center, sep=8pt]{box}
+    核心创新不是 ``我们用了 DAPO 训练 Qwen''，而是\\
+    \textbf{把一个难以自动监督的统计推断问题，转化为可自动生成
+    ground truth、可自动计算 reward、进而可做 RL 的任务。}
+  \end{beamercolorbox}
+
+  \medskip
+  方法主线压缩为：
+  \[
+    \text{Synthetic executable tasks}
+    \rightarrow \text{expert SFT warm start}
+    \rightarrow \text{outcome-verifiable RL}
+  \]
+\end{frame}
+
+% ============================================================
+\section{Fisher-R1（二）：SFT Warm Start}
+
+\begin{frame}{SFT：轻量带过}
+  \begin{itemize}
+    \item Teacher：Claude Sonnet 4.6；
+    \item 固定\textbf{五步工作流}生成轨迹：
+      \[
+        \text{EDA} \rightarrow \text{detailed EDA}
+        \rightarrow \text{assumption checking}
+        \rightarrow \text{method selection}
+        \rightarrow \text{conclusion}
+      \]
+    \item 共生成 4611 条 trajectory，筛选后保留 3851 条；
+    \item 格式化为 ReAct / CodeAct 格式；
+    \item 作为 Qwen（7B / 14B）的 SFT warm-start。
+  \end{itemize}
+
+  \medskip
+  \textit{备注（若被问 SFT loss）}：prompt / observation 只作为 context，
+  只有 assistant tokens 计算 loss。
+\end{frame}
+
+% ============================================================
+\section{Fisher-R1（三）：Outcome-Verifiable RL}
+
+\begin{frame}{Fisher Reward（重点）}
+  先回答：\textbf{为什么这里能做 RL？}——因为 synthetic task 自带
+  verifiable ground truth $p^{*}$。于是定义（论文原式）：
+  \[
+    R(o) = I_{\mathrm{valid}}(o)\left[w_p\, r_p(o) + w_c\, r_c(o)\right],
+    \qquad w_p = 0.9,\quad w_c = 0.1
+  \]
+
+  \medskip
+  \textbf{90\%：$p$-value accuracy}。先做 $z$ 变换再比较：
+  \[
+    z(p) = \Phi^{-1}\!\left(1 - \tfrac{p}{2}\right),
+    \qquad
+    r_p(o) = \exp\!\left(
+      -\frac{\bigl|\min\{z(\hat p),5\} - \min\{z(p^{*}),5\}\bigr|}{\sigma}
+    \right)
+  \]
+  为什么不用 raw $p$-difference？$0.5\leftrightarrow 0.6$ 与
+  $0.1\leftrightarrow 10^{-10}$ 的 $|\Delta p|$ 可能接近，
+  但 statistical evidence 的差距完全不同。
+
+  \medskip
+  \textbf{10\%：conclusion accuracy}。判断 reject / fail-to-reject 是否正确。
+\end{frame}
+
+\begin{frame}{DAPO：两分钟讲完}
+  They optimize this reward using \textbf{DAPO},
+  a group-relative policy optimization method：
+  \[
+    \hat A_i = \frac{R_i - \mu}{\sigma + \epsilon}
+  \]
+  \begin{itemize}
+    \item $\hat A_i$ 代表\textbf{同一道题}多个 rollout 中的相对质量；
+    \item positive advantage $\uparrow$ probability，
+          negative advantage $\downarrow$ probability；
+    \item clip 保证单步更新不要过于激进；
+    \item 丢弃 $\sigma_q^2 = 0$ 的 group——即同组所有 rollout 的 reward
+          \alert{没有差异}（可能全 0、全 1 或全部相同值），
+          目的是丢掉\textbf{没有 relative advantage learning signal} 的组，
+          而非专门丢弃失败组。
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{实验结果}
+
+\begin{frame}{Main Results（Table 1）：只挑三个事实}
+  \textbf{事实 1：post-training 提升巨大}
+  \[
+    7\text{B backbone: } 13.2\% \rightarrow 30.6\%
+    \quad (\text{Hard Strict pass@1})
+  \]
+
+  \medskip
+  \textbf{事实 2：14B 部分超越 GPT-5.4}\\
+  Fisher-R1-14B 在四个 Strict metric 中三个超过 GPT-5.4，例如 Hard：
+  \[
+    33.0\% \ \text{ vs. }\ 30.5\%
+  \]
+  \textit{（注意分寸：不是做成 ``我们打赢了 GPT-5.4'' 的叙事。）}
+
+  \medskip
+  \textbf{事实 3：Raw vs.\ Strict gap（最具科学意义）}
+  \[
+    \text{GPT-5.4 Hard pass@1: } \text{Raw} = 58.3\%,\quad
+    \text{Strict} = 30.5\%
+  \]
+  直接支持论文 thesis：模型常能得到正确的显著方向，
+  但无法可靠地产生正确的 statistical evidence。
+\end{frame}
+
+\begin{frame}{Raw vs.\ Strict Gap 的含义}
+  \begin{beamercolorbox}[center, sep=10pt]{box}
+    \Large Conclusion accuracy can substantially overestimate\\
+    statistical reliability.
+  \end{beamercolorbox}
+
+  \medskip
+  \begin{itemize}
+    \item Raw（结论方向对）$\neq$ Strict（$p$-value 与方法也对）；
+    \item 这正是 Figure 1 失败模式的定量版本：执行正确、结论方向碰对，
+          但 statistical evidence 无效；
+    \item 也因此 P-Bench 的 Strict 评价才是这篇工作真正的贡献点。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ablation \& Generalization（一页）}
+  \textbf{Ablation（P-Hard Strict pass@1, \%）}：
+  \begin{center}
+  \begin{tabular}{l c}
+    \toprule
+    设置 & pass@1 \\
+    \midrule
+    Backbone only          & 13.2 \\
+    + DAPO only            & 25.2 \\
+    + SFT only             & 14.3 \\
+    SFT + DAPO             & \textbf{30.6} \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \[
+    \boxed{\text{SFT warm-start 与 outcome RL 是互补的。}}
+  \]
+
+  \medskip
+  \textbf{Generalization}：训练任务全是 synthetic、P-Bench 任务是真实的；
+  作者做了 embedding nearest-neighbor 分析，未发现 P-Bench 任务与训练
+  prompt 存在 near-duplicate。
+\end{frame}
+
+% ============================================================
+\section{Limitations 与个人讨论}
+
+\begin{frame}{Limitations}
+  \begin{itemize}
+    \item 目前只评估\textbf{单个} hypothesis test；
+    \item 未覆盖 multiple-testing / 多阶段分析 pipeline；
+    \item method choice 存在 uncertainty：同一问题常有多个 defensible
+          statistical procedures；
+    \item 有的问题可能根本不存在单一的 adequate test。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{我的 Critique：Method 非唯一 vs.\ Reward 指向唯一}
+  作者一方面承认\textbf{多个 statistical procedures 都可能 defensible}，
+  因此 reward 不直接奖励 method correctness；另一方面又通过逼近某个
+  canonical $p^{*}$ 来评价模型。于是存在 tension：
+  \[
+    \boxed{\text{method may be non-unique}}
+    \qquad\text{but}\qquad
+    \boxed{\text{reward target is essentially one canonical inference}}
+  \]
+
+  \medskip
+  因此 Fisher-R1 更准确的定性是学习：
+  \[
+    \text{produce inference close to an expert canonical analysis}
+  \]
+  而不能等价为：
+  \[
+    \text{discover the uniquely correct statistical method.}
+  \]
+\end{frame}
+
+% ============================================================
+\section{Takeaway}
+
+\begin{frame}{Takeaway}
+  \begin{enumerate}
+    \setlength{\itemsep}{12pt}
+    \item \textbf{Executable analysis does not imply valid inference.}
+    \item \textbf{P-Bench} 用可执行、专家级 ground truth 的真实任务，
+          暴露并量化了这一 gap。
+    \item \textbf{Synthetic verifiable post-training}（SFT + outcome RL）
+          可以大幅提升统计推断的可靠性。
+    \end{enumerate}
+
+  \medskip
+  \textit{Reference: Miao, Mu, Chen \& Zou.
+  Fisher-R1: Training LLM Agents for Reliable Hypothesis Testing.
+  arXiv:2608.07437, 2026.}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Huge Thanks!\\[12pt]
+    \Large Q \& A
+  \end{center}
+\end{frame}
+
+\end{document}
