@@ -16,6 +16,12 @@ tags: [english, ielts, planning]
 | [[IELTS/Speaking/README\|Speaking]] | 口语（Part 1-3 / 话题卡） |
 | [[IELTS/Vocabulary/README\|Vocabulary]] | 词汇（场景词 / 高频词 / 同义替换） |
 
+## 跨项笔记
+
+| 文件 | 内容 |
+|------|------|
+| [[高频语法错误清单]] | 写作+口语横向语法诊断：control > range，错误优先级与修正 |
+
 ## 常用标签
 
 `#ielts` `#ielts/listening` `#ielts/reading` `#ielts/writing` `#ielts/speaking` `#ielts/vocab`

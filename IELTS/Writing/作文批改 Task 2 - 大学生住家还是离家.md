@@ -39,12 +39,12 @@ tags: [english, ielts, ielts/writing]
 
 再展开：适应新环境、缺家人照顾、自己做饭清洁、宿舍少隐私。
 
-| 原句 | 问题 | 改法 |
-|------|------|------|
-| `There is no needs for university students living at home to get used to...` | `no need` 是固定说法 | `Students who stay with their families do not need to adapt to an unfamiliar environment.` |
-| `focus on academy` | academy = 学院，不是学业 | `focus on their studies` / `focus on academic work` |
-| `daily staffs like house cleaning or meals` | staff = 工作人员 | `cooking, cleaning and other household chores`（**chores = 日常杂务**，直接记） |
-| `living in dormitory` | 要冠词 | `living in a dormitory` / `living in university accommodation` |
+| 原句                                                                           | 问题                | 改法                                                                                         |
+| ---------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
+| `There is no needs for university students living at home to get used to...` | `no need` 是固定说法   | `Students who stay with their families do not need to adapt to an unfamiliar environment.` |
+| `focus on academy`                                                           | academy = 学院，不是学业 | `focus on their studies` / `focus on academic work`                                        |
+| `daily staffs like house cleaning or meals`                                  | staff = 工作人员      | `cooking, cleaning and other household chores`（**chores = 日常杂务**，直接记）                      |
+| `living in dormitory`                                                        | 要冠词               | `living in a dormitory` / `living in university accommodation`                             |
 
 ### 第二主体段：全文最好的部分
 
