@@ -6,7 +6,7 @@
 
 | 目录 | 用途 |
 |------|------|
-| [[Courses/README\|Courses]] | 课堂笔记（初等数论/复变函数/点集拓扑/实变函数/数值代数） |
+| [[Courses/README\|Courses]] | 课堂笔记（初等数论/复变函数/点集拓扑/实变函数/数值代数/群与代数表示引论） |
 | [[Math/README\|Math]] | 数学笔记（代数/ODE/数论/分析） |
 | [[Tech/README\|Tech]] | 技术探索与工程（Agent/RAG/Nahida-Bot/LLM/命令速查/配置） |
 | [[Misc/README\|Misc]] | 杂项（升学规划/面试/项目点子/学生会/数模） |
