@@ -30,7 +30,7 @@ LIMIT 20
 TABLE file.mtime AS "时间"
 FROM "Courses" OR "Math" OR "Tech" OR "Misc"
 SORT file.mtime DESC
-LIMIT 8
+LIMIT 24
 ```
 
 ## 快捷入口

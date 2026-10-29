@@ -1,0 +1,724 @@
+清楚不是不。
+7嗯，嗯我不会讲。
+嗯。
+嗯。
+不错。
+我听不懂。
+okay so today we will start a new chapter so chapter one and trapped to AI think this is of ordinary differential equation that need啊cover most of the topics that will you are that that was that have that discovered by the same a parallel chinese session of this course but today are we will discuss something that is is are uniquely are introduced in this price us so which is about。
+Police three is matter so i have to say that this today's class its probably the most computationally involved。
+class afford the semester so so the is a very of job mostly for me but i hope呃if you you be paying all your attention and keep people would them progress。
+哎，so because呃i have prepare for examples but each each of the example is probably worse呃five times the work that i ve done previously so so let that how do you get through the today together so pursuits method the so far in the last two weeks i think we have learn to save three types of learning or dinner differential equation higher of the leading002的20。
+What about the other others？
+unfortunately for most of the other have you order the equations even if they are莉莉there is no there's know not is system might the way to solve them and lately。
+but。
+we cannot proxy made it so if we一k of course we cannot solve but we can solve it on the computer in make you may say that good enough but the pair里so you are on the computer require first some kind of designer to come up with the new margin to solve something that is not在we are not able to somehow a lately so you have to be so。
+any need someone是be able to design a every them to solve the solve them on their are呃computer secondly。
+那relate to the first不是are first and back收solving you saving any thing，solving any thing on the computer it's only a way to get the approximation。
+not only is so if if you remember in the first day of class i said that II have a diagram about the typical person procedure of the modeling it modeling it really will problem with my medical models呃for自然包围的ordinary differential equation。
+so i need end of with the you are getting your only getting in but the medical about the mission那你比较多you on the computer your approximation is even was most of the times is even more because we know that the computer at least of the from you using to today is computer computer is the stores number this really need our most of the time of it will only give。
+you a bunch of numbers those numbers are i thought it like finally of using two were for minor ary呃buy子so if ev呃further呃father and approximation to the view solution手。
+How do we so that i the the problem the rises how do we a class make AO de the computer more efficiently。
+so to do that to get it so that there is to get up the mission tom驻地solution of the problem all and od the previously也有in your homework in the tax table in the first two chapters all the stuff that will get in are actually in my family medical sense because they are accurate。
+their explosion疯了，functional for this was the solution of an old d but today when looking at是的。新nation。
+so to review let's please are if you have your time table please read the section three point one a little bit about power series well就是上面up being one sentence or its been one friends tayler expansion taylor x扳指。
+remember呃we can we can呢supposed this function is this should not me0it can continues at any your order can be the friendship it infinite and as many times as you want it's supermom so would that are some shine would that the some tion then you can expand。
+you think于tennessee which involve。
+It's function value at one point it's the reported by one point second they will with them for for the so far so meeting show me can approximated a function at the point at least inside a neighbor heard of the point using some of a series。
+A sum some of functions are some of functions involving the review it ves of a function at the same time which is what tail the see you receive。
+this is all about so i think that's easy and that's II think that something that you have learn and use many times啊in your past year of a college in your first year and0a lot of other this too。
+嗯i'm the deep that。
+这个school day in into the session，the three point too。
+See solution on near ir or dinner ary points。So there are。
+five five玩器。
+所以siri solution so just like it the series taylor series is this series expansion啊a series we're presentation of the function so when you try it除to find an amount of terms you get and approximation i sis we have all learn in a calculus one or two one。
+对啊，so you you you learn are the so called the garage and the grange remainder啊，还有呃PRO remainder whatever so收take the series is is is the infinity in even the many terms but if you from kit it apart as station很厉害。
+Estimation estimate on the remainder on the error。
+这think that you missed out so this is was serious as solution means we try to represent the three function we cannot find the and the little ally like we did in the pass to turn as that in the past that to chapters but we may be able to right down one it's serious representation that what you solution means and then the would the the that fits ordinary post that what do。
+we mean by or dinner啊，不是他们有份儿，let's start like we did a bunch of times in the previous uh classes we start with the formula we share with the equation like this啊second order。
+拜拜，王某second order人力，你啊某某几年nine one council of fashion creation a ay the of were prime plus be my price but see why it was should zero where AB and CR let it functions。
+So if you have a learn a complex the another his or a other relate my medical boss you can renew this，interpret the world and let take c you can enter the as。
+Second order the difference。
+偶尔避开是我我要偶尔千伏的0many order the differential。
+if you have learned呃他if your taking the the class of complex，complex variable方烜of complex variables the tennis ly you understand that are in the in the but the turn and lately is a very strong assumption。
+so basically it means super smooth but this me this should here i for the sake of generality and i only need the function to be and the let take in the neighbor just是locally i only need to be super smooth infinitely to different for only in the small neighbor not that salary in the whole plant or on the real life just the and leave so can take you the point eight。
+都again we are looking at an and the proxim ation to the function near ir appoint this apart x imation remember take the series it remember it a serious for presentation of the function there is social there the council so cold radius of conversion right if you want to approx i make a function with the series there was the radius of conversions。
+you only need a it's only fairly good actually你的是内部很outside this the name of this serious for presentation will be far of我be inaccurate that's why would need to focus on the focus in the neighbor heard。
+So now。
+这个cannot depending on how ABC behave，we need to do a little bit of classification of this center of this是neighbour this point eight depending on different classification of this point eight will we will have different results i we will have different strategies regarding finding the three is the representatives for finding the serious solution。
+这那是now that first specify。
+it differently，the US会。
+可那可是来like the title says来the title of the strip to that the easy in the east scenario is where a is an ordinary。
+ordinary meaning means优秀last special it might look and the mathematical to儿子you can look at a read the page to of two at this near this point for a bsc are very smooth收纳桶里的。
+那那在portions阿昔路。
+那only ARSA也是那个AB yes and the the exit isn't that it and let near this being over is that seal bags and take哎嗯稳的踩盘me over a year and share it leads to question ratio functions are and let their ear eight then a is all and or dinner。
+Simple uc it the many that this is the best case she ario if we we can if you want to use the serious representation。
+if it's not ordinary it's special it's singular in my medical这是ordinary is through small is good is simple。
+well why did not simple think you了？
+if the singular we also further divided it into two categories，the first is all regular think your the point although it singular it's not extreme the singular is not too singular the we because it regular single了the you can see what is this what the definition is。
+对外when a is regularly think millar when when it is right when is the eight is the regular thing of the point好的是be of a all or not对one of these two is not and near this point it's not super through would near the point one你知道two to think of them，那我乱明白你not to think you了也没没意思。
+If you motif x over eight this is a small it's AS smoothe right he makes it makes things smoother。
+开始你要new x呃我near it this number is very small right when multiply this fact they can make this function输入not to smooth。
+it makes the that take这个老李if you more to ply at over a where are。
+To see your were if you what if you do need to more to be uli of might say more about this。
+my this the is great working like about this if you do this too motivation对the resulting two functions if both of these too result function are then and let take then it's a regular single the point that means。
+打着玩儿。
+唉，the this function be over a但是first order the leg break singularity near XOA this means不是this means。
+B over a it's the proximately。
+it's proximately一抠图a number divided by x over over A。
+first order how would you break in your large because it if this is true if this is true multiply so what eight不用手的singularity哎，similar0if if a if the little eight if put little eight is a regular single the point and x在me server is a possible the money part the money my number but by x my eight square i most。
+it's and most i always when it might not act might the this were one of the that money to the a square sing'lar it's not very singularis at most and most second order of you break think you了and this case。
+It's called regular thing your the point and still we we may managed to find at least one find under me sa in in the in the form of the serious solution we know this is the second order the i check the to we know this is the second of the lily equation。
+的general solution。
+Second of the home generous linux equation so we know the general solution is are two dimensional，linear space all we need to do in the last weeks class all we need to do to solve is the fun to fundamentally independent solutions so if it's the ordinary point easy we can find to of them as to in in the form of two series if it's regular think you the point in at least。
+we can find one solution two bd呀。
+嗯，she to be a series。
+it's the proxy imation我这about the other one it may also be a serious you may not be serious对that would that can be found easily but if you remember love with formula last week then you know if we can my find one of the solution than we can always use the look of from not to find your other one。哎，the best idea。
+so the third time is of course if we have regular singular point of course we have irregular think of the point that is the most singular好不好of these three so when that happens unfortunately we do not have much we don't have much choice too。浴室小。
+为为为为we want discussion in in this class for some special cases，people are are that mentation would of scientists were able to find呃some kind of serious representation or using special special time need to a classmate solution but that that not it that's not a universal general way to do it show啊。
+we will be discussing it here are the will focus on the first two态ordinary point and regular think your the point2a the from now on without the loss of generality that shift shift the act xxx so that a becomes zero to make our competition of competition is easier。
+So if we focus on if we focus on AA near x equals zero the series that we get if is the policy is that it is all remember the name the the police years is the near zero is how make laing series not just take the series in general lawrences you。
+2，he is a result哦，the back of the wrong but the great他们呃if it feel free to find the finda呃detail of the proof but he's the fact or he is why we're我did he is why and why we can do what will you going to do next。
+If at it if zero is an ordinary point then。
+the solution can be expanded in paris is什么more currencies。
+as for the radius conversions，s set s anytime you want to represent it function as the series you have to be careful because there is something of use this the radio of the convergence in might be infinity3in rare occasion to most of the time一台the final nine radius of convergence。
+The the really test of conversion depends on those of these two functions。
+Depends on the singularity of these to function on the complex twin。
+Remember this series。
+remember the series in a in嗯条格的。
+looks like you very nice conversion series东丽on the real line。
+if you have not your exercise correctly，you know the radius the radius of conversion of this function呃of this the series we said it will presentation of this function is one what is the we what was the reader of the conversion of the this function one。
+the read a why big because the near singularity哦，this function on the complex plan where where where is the singularity of this function fast so minus time喂so the radius of对this function the theory the release of computers for she is of this function is want to be because on come back x play there is single large and for some might as the eye on the real like this。
+person perfect fine but it unfortunately sing'lar2add in the come back explain them where so we all depends on the singularity of these to confession function the normal life the cold fusion function of the normal life zed function right why double plus b over a why prime us see over a one。
+i will call the capital p and we because all this capital q just like we did last time哎。
+now let's do something example c啊we will face。
+在now from the park will yes yes friend i worked the hardest不大do hope that you can keep up with the pace and at least keep up with the pace is it if if you feel use a if you come comfortable lets do it to get哎so that one。
+The for this function for this story for this question because this from again as so i want the underside because this is are examples are two a very involved of。
+i'm not you sing but new new new example now i only using the example the text小猿missing anything always go back to the text two for一头steps。
+喂，that s路一直别的呢。
+The step one first the capital pete confession the normal life could you function it could fusion function are ideas。
+these are the two我这先function right收let me ask sq他说if so i'm i'm trying to a about the may be now i am trying to approx the make the solution there s equals to the zero哎。
+那。
+And zero。
+is not a thing it is a good function哎，A走these two function are bad or similar at。
+put us so many us too right but not to get about plus minus two i'm on come you are only talking about the near zero喂小you can try so if if you if you feel interesting也the few in true in train try doing the same thing that i do you in the following minutes for x equals to put us so minus two stand and see what breaks down。
+what would put that it will break that嗯because x equals to plus mind this might us to its not a ordinary point zero is not know step two对不起。
+So according to according to the sym how could according to the fact，but i just demonstrate it and II just in for you to believe me for now we know that the solution。
+Can be has a serious representation why equal to some。
+Cn x reached the end power。
+首呃and go from zero to infinity so if why is this。
+What is why prime。
+so far for the first one呃so you can always the friendship the general time n becomes and CNMX to the m minus and my one power right。
+但在that how you the friendship i you still some from zero to infinity。
+Now you may ask oh。
+好逗哎，好，那我the sum is the sun is all as always starts from zero of art from there，but here i have a突然s to the end my soon one so it and start from zero old the first when they beat one of x don't worry be because你知道位置multiply by哎小点儿是no。
+don't worry，there's the extra v的事。
+the this is why prime what what is why don't time for the same reason NM and minus one cn xx the and minus one哎2right so this is how you the friendship here is a series because we are soon that the serious super smooth or and the lady at that point in of we can do turn by turn differentiation for mathematics to then for for doing it the much。
+the many this looks fish what i'm you doing，it is not guaranteed but this is applied and engineering the supposed will in the engineering class and let the sume the why it's and let take c呃near the neighbor so it's find that so it's it's finis uniform me convergent we can to turn my time。
+就算shh。
+All right so what we have once we have a diverse is your presentation let's plus。
+let's plug get back into the original equation for the first time is x square m minus four multiply by white were prime of which is zero呃zero NM and minus one cnn x the i'm mone。
+Plus three x moto by while prime three eggs multiply by the some of zero to finish NMCNX stand and one power and the last time is plus and why which is just some zero see and to the end。
+three three big series哎，now let me use four different colors to identify this four times as big because the first one the the first one还有是the first time has two component so this time are used blue and the second time MI use right the certain MI use yellow and the first time are use呃。
+2B。
+嗯。
+第二份four see you is right all serious。
+And we want this to be equals two。
+6，some of these for all to be added up to the zero not the first one is easy because the blue one is easy。
+Because we can always right down。
+I thought the x great inside。
+it become also the sorry哎you该是crime when you find any mistake so this should be at minus two right i'm depression it twice so if you get really point out the mistake that i made so the first time is this。
+可爱base是的16台论坛。What about the rest？
+the return it's minus who were some of an嗯and minus one c nx n minus two。
+but he has the problem，here's the probe so at the end of the day if you you can imagine id对不对，we want to come bine this for sales together but if this are if this to a different that's no way we can combine them to get up来。
+2your your adding different things收we always in the in in this s安踏you want to manipulate c different series you want to make sure that this these numbers are the same so we have the like them on up a line。
+how do you do it let s not take2哎，so let's called this and prime。
+any one us to equals and prime means n equals to any proposes two哎。
+Let's call this number that s called this the number and might the through that because this is number and time。
+Then this becomes the race the and plan see becomes and prime plus two right。
+it's always this number门儿是always be to be bigger than this number来this becomes the and plus two similarly if becomes and plus two and plus one哎。
+and then好好how do you so。
+you from if any the comes from沙场肌肉where does us and plan me start to。
+Minus two right you may you may say at minus two。
+拜拜，when any need my us to the the first time here is zero。
+the second or when any when am prime is你卖的是one this time miss you收。
+You're not get the new your change。收。
+and the prime also start with zero可爱because the first two的方式这串because this leads to the the first from test this st to be zero the second time has st this should be zero the first to tell is always zero so it seems to just the sum to the staff from zero and with out a lots of generality we can just这now we can just do what remove the prime。
+为什么remove the prime。
+Remove the prime。
+Ok so this is what we want，this is what we want to。
+sum嗯啊。
+This is now after the shooting this to number these two numbers are the same。
+来so the yellow one is easier啊，although you can not read it so let me you have like so this the certain m is easy because is some some of three and see NXRS the end。
+哎，i'm put it this ex inside here。so。
+the the last one is also easy呃III don't II don't need to i don't need to a really right so plus this to be zero。
+now we can we can let them up together收哎别of day we get the following。
+The sun。
+the sun啊and starting from zero and multiply by and minus one plus three and plus one this whole thing multiply by see to today and c nx to the and power。
+啊，x to the end power is all also we come on factors so i can live out of for now plus minus sorry minus four。
+And plus two and plus one cn plus two。
+X to the end equals zero。
+谁说的？
+第2点ABN啊have不难。
+Some appear to hear and then one from here to hear。
+this is the this some some ation that we get our from all this how do we how do you get up the other of this how do we enter this so it s哪一个last night says that's make kes series has to be zero for any x inside the small neighbor her around as equals to zero。
+This has to be true for all and yes X。
+What does the tailors it means？But this guy。
+the the cold fusion it means this function is a zero function would do this内部和地面all every single one of these confusions should be zero inside this neighbor i every single one了，everything you want so if you complete the squares so what is this what is the this is n square plus two and price us one i so if anyone any possible once square so put in this all。
+Together now you we get we get the following。
+it means for any and it means for any end and plus once square multiply by see and has to be always equal two has always be equal to four and plus two and plus one c and plus two this has to always people and it was to zero to one to three four five six and if we can so this one of these can also one of this与get cn plus。
+Two is equal to and plus one c cnn divided by four and flash too。
+And this is what we call and this is all we they always occur the something like this something like this all the course in the problem of shopping and od using part sales series and this is what we call。
+A re currents relationship a re currents relation on。
+哎，这是哦，我可是我这是没意思。一名for example。
+A all a can of specifically ihc。
+c two when and equals to zero it's equals to see zero divided by it嗯。C。
+three when and equals to one is equal to to see when divided by日。
+twelve is equal to see one over ver six哎sea'four is it when see for calls on the and equals two it's three see and divided by a three three two divided by。
+sixteen。
+so on and so far哎，so我对你方something very interesting。
+小theater is computed by these there is computed by see one seat boys computed by see you too收。
+我how do we computer these there and see you one走we know we know from the we know how to compute see to see to see for up to c infinity UC two three parameters c zero is she one but know what tell you how to see you see one that's对在做we need because this is a second order奥迪we will have to按no constants and。
+That exactly see you and see you want in this calculation so if if if you put all this to if you put all everything here together what do you get，what would we get them in the end，is this。
+so the first step the first step is to identify as soon那他连8的about very对the first set check i that five的我that identify what s it should zero is is it day那point or regular single point of year regular single one here is the regular single ok that's the first day the two very involved you have to you。
+啊，是put it the all the power series for the in to the original question哎，别对不对，you get this we currents relation that's proud and proud of the second that and the first step using the records relation to write down the general solution we know general solution why it's always we going to see one one one for AC哇哦it three the last weeks class will vote。
+the see one why one of the city to why two right but today let's changed the little bit it simple let's call them m see zero see there why zero and see one right one because see zero and what see one as are the在have a more emerged already so what see what what's不行see zero and see when are two undertake my constant what's why you and i one why。
+zero is just see zero呃why zero is the function more time by the it's the fundamental solution the gets more to apply by this zero is this it's one plus one over eight where are plus。
+three over sixteen multiply by one of were the eight which just呃three of one hundred twenty eight x four plus到到到。
+you can imagine why zero is a power series it only contains given power of x zero there's how the second part rx what time should the six part收啊，我that why zero。
+What's one one why one，yes。
+X plus。
+one over six XQ plus the next term i think is one over thirty XF plus打打打so why one yes s and another of fundamental solution that contains only阿powers好拜the one i should three x five x to the seven and so far and list啥的to fundamental solutions that we are looking to fine for this second order。
+何某002何某今年not concern of fusion一窥医生that can not be so using爱你。
+迈克带v last week the this is why there is the first solution。
+Y呃yy zero is this one and的。
+Why one is the blue one？
+so this ur的fundamental solution as you can see。
+答，idea of shoving this using solving and the question using time that serious might the it's not how but the competition is very involve嗯just the first easy example。
+反正本来说，我可以even more come to because知道哎and the呃centerpieces the key object is the records relation to get this record the the process the set to get the re current relation this is the show part of the problem now let's look up thank。
+呃，II like that two i like the three pages so嗯in fear of needing more space but ii one have did that only need啊你的动力to for all right so this is the second example in the also we ask for example in page through seven坐垫it车啊second order the media。
+郝某今年是哪proficient profession？
+it's not all人and fortunately it's that can use the coffee recent and it's not all that because well the coffees sion that are reversed if gra multiply by wiper if really is multiply by white would point them。
+it's all一点也可以选。
+哎，李白if反目if i move this confusion to up front that it so这equation that we can solve using我like will would the last time。
+But unfortunately this is not always。
+2。
+Thank you that one the people function yes。
+My next XQ function yes minus where are of。
+definitely。
+And the take。
+Atx equal to you。对。
+definitely and the day ix一个是zero that too。
+Do the same thing as we did before？
+why equals to some of CNXDN why prime equals to some of anything and action the and many us soon one but this time this example it may look singer because why一个why time is more like by X。
+So that means。
+that means i can easily right down is she a second write down the serious for my prime2手，为了genl turn have the that has the general turn to the end because there is some please find the ex that can be啊不做and similarly as well wide of prime is he go to some of and my and multiple and minus one see and x to the end。So okay this three。
+those but然后police are next break of five and travel the of see from the three guys in to the original equation and see what you can get嗯。
+嗯。
+你。
+嗯。
+是。
+不去。
+哎。
+嗯。
+ok if we put asked the everything everything together呃soso again i'm AI made the my stay be before it呃。
+委托before we broke of a break。
+呃，both for the for the break so IA apparently if this is if this all other the equation that the great is the multiply by square but in this case unfortunately still will having this case。
+square is why the were prime is no doubt i should probably move the to let斗third。
+We still having this。
+why of prime is this and the哎呀妈的说and my mother and line one their ass to do and minus one this is why the table time x grace moto by about why哎。
+this is what this is what will your facing，so let's do the same thing with that would they be before the first of all why prime becomes，why plan becomes the song of an and minus one cn x to the m minus two and it对and from zero start from zero嗯and for six zero so we need to shift them so and might this one i'm want us to become。
+The end then cm become c and plus two and then i'm one some one becomes an flash one and then i'm plus two so everything here has to be shift to a new。
+Series but if and starts from two ue XN starts from zero。
+嗯，来命。
+哎，so originally this equation would this series for for white double prime。
+for white were prime of course you can write and start from from the view of course you can write this the be zero but were me that is and starts from two right because the one end is zero this first time is one anyone this first and the second and their results the zero the you really you can write上传two，这个是start strong too we can write5can easily shift the to this。
+哎，no problem this is good。
+what about the second term to the second time is something that the nice this one is just that minus some of an c nx主题and the power。
+The this is good and this this is a ok what about the last one the last one is probably gives up the most trouble this is the some of。
+呃，minus the sum of starting everything starts from the zero ACNX to the。
+because。
+Because this one can be before the shift that into some from zero thanks to the end c to the and minus two like this。
+x to the end哎and this guy it's really some of fun too。
+i'm plus的this one。
+two and plus one c nm plus two to the end出来。
+minus。
+minus哎sod咋的all the all the time that该makes up together。
+and this one has also be你打broken down into two parts啊。
+然后sorry。
+哎。
+也是that the reason the reason why哦对对the question may look like it simpler than the previous example the problem arises。
+喂，we have this means much so the last to have all has experts to all the other the one only has是and so we have the like them about together or you see that this time i actually has QI should return this to i should time so的份一can be bring down and this and this哀伤哎嗯together。
+喂。
+来let me see are and i think i don't want to make any mistakes also so i reverse this and reverse this too。
+嗯。
+so at the end of the day you get the following result because of the fact that本来be because of the find this time you can check the text table for more details of the corner detail of the five with this to现在F注意get ten so would the fact that this time m is not the same唉no different than the other the two then we have something new and。
+different we have to write的在pray in previous example we ended up combining all four series together for this example we can we cannot do that anymore because they have the different then。
+So for the food for the first two terms。
+for the first for the first two series，it's like like this leads to see this to see i did see you said this see you this too see you start starts from zero本this see sorry from ass to the that's where b please to see we start from the constant one xx gra XQ this series starter IS great so is that like these two series are longer have more。
+have two more车模串then this one so that's why we need to write down the and result in into to in in into turn should the first one。
+because。
+还还only two terms from the first two series because these two series are longer than the third one。
+Plus the some of any from two to finish。
+and plus two and plus one c nm plus two my嗯cn minus see and minus two x race to the end啊，第一下哦。
+race to the end equals to zero哎。
+So this one II need to。
+对对，是。
+这个this one i have to break it down into two parts。
+let me let me re writers一次。
+Sorry II let me make this scanner。
+because of the fact that this is equal to see their as gra plus CA one XQ plus do does it starts it's starts from the and as well are so it cannot be matched with这单立场你cannot be combine with any time啊。
+In the first one so that's why we need to break it them in into into two parts like this so to computer it means for for an for an equal to zero。
+The let's look at them a one by one the serious for h it's a they don't can get from here。
+哎，fox他for for the power of for the part of which just like zero then the first time is zero plus two multiple by zero plus one multiple by see too minus zero multiple by see zero is zero if这是否for the same reason because有everything at the two zero that means that means every single cold fusion in ED to series has to be zero everything should be。
+zero so the power这个confusion for x the rest is the part as zero has to be zero of which should start呃in the first three。
+So that means。
+Seato yes zero。
+哎，if f一if the qualification for x zero is the first series has should be zero。
+that means this就c two has to be zero。
+But the same reason x one also。
+That only one time cause on so as one。
+wait in the first series大名one plus two one plus one the three minus see one has to be zero that means see three equals two see when divided by six。
+哎。
+这是啥，就是三真的we can get from the first thing word about the last one for as to decay when he great read or equal to two。
+what will get in is the same是nothing similar啊，think that we get from in previous example we will get a see and plus two is equal to n and my see i want us too is divided by any plus two over and plus one so this is our recurrence。
+relation。
+So this is different from the previous example。
+你的33if you u不was the last time这是the confusion定的。
+呃，那what the confusion on further along the way can be computed by the previous one profession see one is the computer but see two is computed by see their see boys computed by see to see six this computer by see for or see five from you哦，c three is computed by see one c five is computed by see three one by one oh one from one one want to one。
+Cause find on this but this one is one of the two case found on this。
+喂，对的，c four玩儿it is computer by c two MC zero。
+the five it's computed by see three and see one啊。
+so是again see zero free。
+See one free。
+洗头zero see three see you one over six c four YS six。
+use this re current relation哎，that's我。
+The this example of the tailors step three。
+why is equal to see zero plus see one eggs plus one of six啊比because she to is zero so is c zero multiply by as well are thus one over six see one XQ plus the next time is那next what next time with is see four c four which is then and equals就把太上this should be k对let me changed for this all together嗯。
+嗯。
+and嗯for anybody of equals the true see four or when anything too three four嗯。
+Two two。
+the city to使劲sogo my us see there怎么卖呢？
+but any need to two questions are four four times the three is不要。
+minus six zero over twelve x to the fort哎and you can and一天continue to computer the remaining time NM so at the end of the day。
+Why is still see there why zero but he one one one and what is see why zero why is zero is it could the one minus one over twelve like a this before。
+呃，对他make any mistakes over this this miner this should be plus少林it looks weird，plus是这是the开始yes那个my s so the move is to the other the size of this becomes plus for anything and first seem to that one啊。
+确实b plus one of were travel。
+So plus x where are and you could you can check after what the forth。
+and plus one over ninety x six so this is this compare this with the take this is the text for example the pack of the text of this is the all the numbers and tax table呃starting from page to seventy are correct so i made i may have made some mistakes but the title of king嗯so you can verify that the dot the this is why zero plus see one。
+see one else x plus one over six XQ be like we did just now and the third time mis four of the four three of four for that再到到到i again we have to find the metal solutions the first one why zero here n等等等等the second one why one here so this is why one。
+这个事实why there so what's the new so there are something similar that there is there there are some things that remain the same in both the the first example and this six than ple which is you have two three parameters see there and see what he SA the same。
+but some days3等于is different真惨that could require relations the current relation in both three terms。
+three in order手的the the first time is computed by the second and the the zero this term is computed by three three and see you one and so for one and so受案的收获。
+走灯so in the previous don't expect the every every time you see something like this。
+one我完全what time on the like and site and enjoy on the right hand side sometimes it's one time on the that and side and two terms。
+Find the that and that and this is just for second order for high order the equations the recent relations yes you can expect to get even more more complicate。
+嗯，but for for the second example the usual part is the hard part is here it's here。
+It's isis it's really ready this time this equal to the sum of starting from two c and minus two x tod end because of the fact that。
+You start the second time it is the second or and all the other the two three is start from the zero of time the best of miss match。
+但是the match since that the mismatch对unfortunately the series will get the over the combined series that will come combine their will get it without the serious would have to can take two parts。
+one does one time that this is very short and find that only need has two terms他们from the food to see is and the the other one has infinitely many terms的the same similar to the previous example and this is what new and special this example哎and that complaints so you can you notice啊，i only covers好吧。
+one four of the slides but啊don't worry i啊，那i intentionally i put the something that the the this this like the content two weeks classes收all right the this is the second example。
+There's the more relevant example me then it close closely closely connected to a real life from the which is this the shor under the different tie question for this looks very much like movie had done before。
+是的，是this the general form of this death啊，l four is the parameter LF is given parameter something them all just like in last week class也给have something to do with。
+i give the that小小的different your question，但just like the example that we need that's week the render different question is something that you get from using separation very separation of variable for a pd。
+remember外面discuss the some low will the we will discuss the section two point eight when we discuss呃帮助value problem。
+喂，i introduced the way一窥是example。
+APD using the separation of available。
+You get two separate old so this the short and differentiation it's also one of the old years thank you get if you try to use separation onal baral variable for it boy PD for he be quite。
+哦，呃sphere i think啊小。
+my as post the video with very detailed there were version保守in your tax low唉唉呃咳啊a if you down the this are from the learning is it just you if you quick on this picture you would be direct read the right to ABDBD you video嗯this ski this profits are you are hope you are familiar already be because i used his video。
+to demonstrate的呃收solution of we be creation and last time小开个啥。
+so it's related to the proper room on the question on the sphere and the person plus on the question is the very important p de in electrical that if are in the heat呃three or does not make its relate the heat。
+he did really distribution any need the very important in it electromagnetics the electro没that day还dynamics relate to do the electrons。
+electricity守在这是什么？
+以后information so do it after the it's more complicated than the three years to example to the second example is all very complicated and this one is it even more so手II need you and after the class reading all right。
+三星牌section two three point three and section对方for if you think if you think啊ordinary point is complicated。
+好的we until we see this this is一个when you so only in the point when the the the power is matters for the an or dinner this point is conceptual easy and can computationally exhausting。her把。
+For for regular think your the point。
+Police is will not work。
+Because it's the regular single the point meaning i will revisited and the minute the definition of what they regular singular point in next。
+But i apparently if it's ec the were singular it meet it it's warning sign it's more it's not as easy as ordinary point but mostly manageable。
+i'm using the world the manager about here李宁你超儿本呢impossible so if my imaginable manager so again。
+Art with this。
+So if you remember。
+椅子miss like we call this the sky have to pin哦evening the first life we call this be over eight right，but now。
+we could all the the little people over us the reason why we write this for the three it's for the reason that are have just demonstrate被告if x equals to zero if the zero would this sapp point that will care about if this name the the center of the neighbor of that we care about if we know this point is regularly singular that在we know the think you like this。
+Structure is at most one over X。
+this at the most have to break first of all the everyday for this cold and is at most one over x great for this方式at most so the way the way we were the and the way will writing this to function that means little to p and little to you these two functions little bear little to q these two functions are very good smote and let take in this never her。
+哦，了哦，single the all of that singularity，all of the singular feature啊，我不是现在b in the they normally that's why that's why we start with this to explicitly telling you to explicitly tell you the singularity。
+Yes at most auge break。
+First order in the fish meher fusion function for while and second order the in the confusion function for a while。I most。
+the six PMQ we know are my riding them this way by starting by using the starting point in this form we know he is and let the get to why it has the22型on my glory nance three to the conversation he is also A。
+he say my coloring series will presentation like this哎。
+so this in point this same point n嗯he is he could to put their people when ask for people to extra pets the people to you but people act actually the for the show one q is he go to q bag is she good to q zero but you one x for secure to explain so and so for这个分销收银i hope that you i don't i hope you don't get the。
+strict of frustrate by the comp ity of computation in the previous to expensive，especially the second example when i make some with and that the mistakes but the can send他在i hope you can understand it fairly。
+it's very least three four嗯。啊。
+without loss of control为without loss of generality he still and kill use zero。
+对呀，那size of ten this is this zero why because if so he there and accused your in both of them if both手动are zero then。
+this function is the and that take所以真的is almost the on dinner that's no reason to developed and new technique手without loss of generality。
+At least one of them，at least one of them。Yes not you。
+而。
+two three哦，to这是just like in the previous example a just like in the previous section in the section to support to i presented you would the fact or see a navy if this point is ordinary人we can use the power series哎，so that was the back or there were in first previous section in this section。
+Also i'm consenting would you would the back all see。
+please please look at嘿魏汀兰，就说你five you know if you if you don't have your test table i'm time i'm to i'm right ready you here so。
+So in previous section we know that why is。
+For for for one or dinner re point。
+From an ordinary point why is equal to some of c nx the end i for near all their point what year rather think your the point。
+This no long over。but。
+I said its manageable。
+when is the regularly think of the point呃。
+when is a regular singular point，although it's not power series it turns we can still find a series我的三个series has the perfect ass with the art power。
+it still a serious but把它拉本纳的power service because奥尔can be anything。
+can be rational number can别入医院，should the number can be a passed the number can be neg them now2how can we got to the point five where are you up to one minus minus pie anything possible but this is number and this still has this four someone like a series and this it's what we call it for being during赛事for bonus theory see you it for good。
+for being a series it's not the policy is not the tailor or the more color series it's a for business is series at times the following tennis the following area with them or steps that will be doing it's all it for business method for business is买的。
+it turns out，it turns out，不然when this is a regular single the point。
+We have this one to be。
+We have this form to be。
+Yes serious solution it's it's a for b series solution。
+and just like we have sing in last week it turns out the all this number are it's some solution is solution to some of you bring equation it's all initial equation last week we saw a algebra creation and we we we called characteristic question it's something a is put in normal equation that we got from solving一点cousin confusion second order the home you need they need all d一aol equation。
+二手a second order李宁home genius欧迪。but。
+When not concern could fusion both of these two types of the question which we could we could always and the take ally you sing would be call a characteristic question which was a which was too different。
+Auge break point in normal a creation。
+Today in this section also we have something like this we also have a second order polly normal equation and if we saw them sorry if we solve it we also get some solution on the complex plan you would give us too and those those to solution our percisely。
+你是us now。
+depending on how did to solutions a dep不是in particular depending on the difference between these two solutions。
+Depending on the difference of these solutions。
+We have this too scarious first the difference is not the integer。
+That's good when this happens we will see this in the in in two examples when that happens when the difference of these two solutions are not its not a it's not an integer then we have two find under me。
+both of which2both the rich us for business news series。
+good we get two serious solution to for being a series solution this is good but跌幅some and for she never you occurs if the difference of these to solutions is an integer。
+We might be in trouble。
+Namely we can we might only get one for business solution and what about the other one。
+I have mentioned earlier we may get the other one you then。
+lure of form哎，which is what we call the exceptional case in section对dedicated。
+With with the with the dedicate section three point four。
+So to summarize three scenario first if the difference of these to solution to some are i'm yet to tell i have yet to tell you what this equation is。but。
+pretend that you know that there is some of you break equation you can solve you get to solutions supposed the this to solution而different by a long integer then。
+Two for business ions，fundamental solutions。good。
+easy哎easy really，relatively，relatively easy。
+Second sy reo。
+If the difference of these two yes an integer but somehow but somehow magically or buy some food。
+We can still get two for business solutions in some cases in some case。
+And these two are good。
+in both of these should look in in in one of in both the with a scenarios we get up for business一定solutions。
+我的包。
+The last one the exceptional case。
+Only wonderful be fundamental solutions。
+only one for being in fundamental solution the other one can be only getting it can be only i ko率呃can only be get in obtained by some special are more complicated technique like the of for of the of some other嗯。
+all right are before we break，let's stit let's give us a that have a high start on第2one of the example this is that this is the example from are from per from the page to twenty two。
+i should i put the that i should have reminded all of you guys bring your text table or like it electronic version of the text table will be because阿拉there are a lot of details it in todays class that really you really have to be as look looking at the text book i the step one。
+Stone so people what is P。
+what is tree，remember the standard the standard form of will look looking at should be why the prime plus p over x why prius q ue of were great，why equals zero喂in this example what is P。
+it's just too哎水fort what's you。
+what's you q is sx over x multiply by x gra so it's x来。
+Q。
+It s whatever the cold fusion in front the why divided by the leading confusion which is the here the multiply by good。
+哎，你的谁。
+这个confusion in front of this the in front the voice yes x normalize对but the by xxxx one i关于老三的form that think got is divided by expect so you have the more of by explain so i didn't end of the day呃q back xx贵呃呃哎QQ of x is。
+one x great i don't know why it made mistakes here q xx great so he is equal to two plus zero but experts the zero multiple with a but start down q it's you go to zero plus zero multiply by x算是one more tii square放到到到嗯。
+so please the this is p zero this is pone this this p two this is pa cul zero this is your one嗯this is sq two。哎。
+小using the same notation as in the text走。
+那第一是的P3q and then and then the let's to step too。
+Step two。
+so why of course this they go to xr来首we know that the solution has some for being with presentation so why is he good to xx tr some of CNNXDN so when we get when we get more multiply by ax then this becomes plus one and then if you go to。
+The some of the see and MX to do。
+And plus r plus one and this this is xy in the in our original question and why prime of course this what。
+X我的what is my prime。
+What should i how to the different she how would the differences this guy。
+Orix o oh oh x over are so why price is he go to some of。
+plus2cnn ex of an plus are minus one。
+喂，because why is it going to some of CNX plus2哎把multiply are inside the series so if we differentiate it you get at my experts are our friend then if you get more to apply by two in the original question of everything in multiply by two来自easy哎。
+哎，the last time XY double prime XY double right。
+Why double prime is he could to some of。
+And plus are just like this before but with now we need to differentiate it twice XN plus or minus two because we have differenced it twice but but because of the fact that we get multiply by ix in the are you original equation then this becomes minus one。
+来。
+So all together all together if we put everything。
+Backing to the original question，the nice to turn the first as sorry the first to time m the first two terms are easy，adding the first terms are easy。
+It's just the some of。
+and plus are and plus are minus one嗯嗯干面粉d here plus two and plus are comme from to and prime。
+this guy multiply by cn XN more because our minus one and this is the first two series and then one plus and from two to infinity the last one is c and minus two x啊。
+没没比，maybe i should post on the啊don't right ready to five我不是。
+但the the last time m the last time mis xy x one is the sun of zero the infinity cn XNM plus are plus one right now。
+Lets i this is i used the green one so let's。
+i think it would would break after i finished嗯we shift again like would it before we shift the index from and plus on an any plans are plus one to what we need which just the same as the previous one and plus or minus one we shift that then we we shift the down为we decreased by two。
+So here cn becomes and minus two。
+喂，可爱。被告。
+你的规定with the try everything here by two3511to get everything here by two and because of the day with be because of the better that we should this呃by the two that down by two here we should move by two excel201we should start at two。
+We need to start by two because the first cold fusion entered is see zero。
+only one you are such with two the first time is上面一个口一个my us to yes when any is too是吧，two minus two this year与such from there so this way we can combine these three together。
+And this is something that way。
+would start to work after the break but lets break for啊波尔吧。
+其实嗯。
+好吧。
+嗯。
+的啊二中华啊。好。啊。白发。
+放我不知道。嗯，同意。嗯。嗯。
+嗯。
+嗯。
+嗯。
+去好。
+嗯。
+去。
+嗯。
+是。
+是。
+不是。
+是的。
+嗯。
+寄。
+就是对天气嗯，信息七去去。
+8，去。
+ok so just like a previous the example just like our previous example for your on dinner point we have a makes much in the series of involved so the first two are the same all of the same line but the next one after her卖身the explosion嗯也become sholder so that one will have to。
+不是more competition to do which is good and this time not only many good。
+哇哦你you you can we can also you will do那里是good点，not are like the republicans first i have to tell you that this is what makes the the make me the work。
+嗯，so fox so let's look at this equation and let see if it。
+That's see if i can。
+靠啊。
+啊。
+嗯。
+ok嗯对的all right。而一个so。
+The let's look at what will have we were we help you。
+So just like we did before。
+we have a miss match and we have to come up with friend呃difference conditions we have different equations for the confusion and just like you for everything has all the cold fusion，all the cold fusion that's to be zero。
+这four for the life for the for the first one x all minus one lamelyn equal to zero。
+我这说说when an equal to zero you we can only you read from four series。
+我比一r our minus one plus two are equal to zero出来。
+When and is there。
+红地毯否for x to the all my one part it is in the first series and if you if if even zero that would mean this has比赛是吧，来that's what we all。
+In the show equation。
+In the show equation。
+Like i have problems this is a second all the point in question that has two solutions。
+What does the two solutions。
+zero。
+IM minus one I。
+All is equal to zero。偶尔all。
+就是漏选。
+哎，说那question this question careless tell users what the value of all should be because at this day how do now previously in the previous line。
+We only know that the solution has this form。
+we only know that the solution like you对we don't know what are you。
+we don't know what are you only when you plan everything do the hard work to the complication flock everything into the original equation，use all the series from presentation you find all has to set the for the satisfied with this你的手equation candy has two value zero and might this one and is this example。
+unfortunately the difference between these too is the integer你说话so we may not you two for business serv solution but at least at least we will get one which one should we try first。
+always start from the small one always star with the世贸楼啊，big because if you need of example this all the other example with this and later sections caf的有uc的why would always start with them猫的吧。
+我去of course they re that make long discussion at the beginning of such as to point four。
+Big because starting with the smaller one would definitely give you one solution if you thought was the if you start if you you say that you this one you may not get a for business solution。
+m for for this particular example，you should not有什么one more reason to not start with this one。
+For this particular example，you definitely should not start with the big one which he is still here。
+Why when are is zero，you means the solution is finality。
+near this point哎that's strange because this is the regular single point the solution should not be a policies。
+should not have the power serious首都血，but when i zero。
+Oh when all is zero one it's just as to the zero which is one some multiply by by something like this。
+This is the power series that it's and the take that nothing nothing special interesting happens。so。
+It s no reason why would you should start with this。
+So we start with the the the the the small one。
+so for this so one should you have so for the initial initial equation有有有you keep if you keep working，哎。
+The for this is the first that the smallest stern the second term when and equals one。
+我we need when n equals two。
+one x2我do we have one plus呃我our plus one。
+嗯。
+Our plus one。
+multipart82plus two are plus one。
+意思our plus one multiple are plus two。喂。
+If you start with this。
+It's all the mentally satisfy。
+喂。
+So this not this is not this do not tell us anything new，this does not to the anything new。嗯。
+So for the third one。
+For fox and plus are and great of equal to too then everything just follow follows are just like before you get the require relation because you have to add everything together。
+Cnn c and minus two it's it S。
+Let me right it down amp。
+and plans are and prepare minus one the two and plus are我确实。
+And plus are and plus are plus one I。
+cnn意思嗯一口plus c nm minus two equals to zero。
+喂，because starting from and a starting point and equals the two you get attribution for the power of other ways should the power of experts star or by one因为天contribution from both series授予还this this from the first year is你还this from the second you so this is what that were be hopeful this is the this is d啊啊。
+recor again the return relations that we want minus and minus two and first us all嗯but are plus one again this is recurrence re current relation。
+来so the difference between the a regular single the the policy is matter for a regular thing to the point part three is matter for ordinary thing。
+Good the point is this said that too。
+那农历not only leaves you your soon the serious definitely that the free there was the as to the are in front also so。
+you only need this requires relation you get哎你这you get and in sensual equation you need to solve one should have thought that if you是one手r rk公里比one of these two try this first刷。
+R can only be one of these two if try that its from the second one might this by and all the other one。ok。
+you can put the pretty easily for example，收in particular when are is minus one this is going on and this this and minus one so to summarize the last step step three step three why我at least one of them why zero is equal to x this is to the minus one power are is they would minus one some the mission of cn x the and the power when when是。
+band is equal to many us see and minus two and plus are啊嗯sorry嗯。
+NN minus one。
+so for this sequence the second question are see one i think this is she one so see one has to be zero so not when all is minus one is all the many be satisfied本one one once。
+it's its when all is minus one see you one can be anything because it the perfect or is there but once are is zero see one has to be zero哎so this this is something the second question to us and one that the the the last page ok。
+So for other equals to minus one。As i said。
+When are is equal to minus one see zero and see one DSA free。
+This is the good this is good it means when are equals to see one we we may we may get to fundamentally different solution so when all this is minus one。
+so now we can end we can happily and confidently he really is the zero be because now when are you going to my as us one the initial condition at us对the initial contact，the initial equation tells are can be minus one or zero and the second equation tell us when are is minus one see one is also the were free parameter so together this is good so why is always。
+We could to see their why there plus one by one ass we did before and this time see zero。
+yes but the it why zero is what it s one of x this is x于2nx手机this factor x one。
+And then what see zero three。
+嗯，minus see zero divided by by one equals to too。
+x square and then en有if you have everyone everyone has take taking the ACT college entrance，st college entrance tests so i assume II believe everybody should be familiar of finding the general term说啊。
+This guy the next time what is the next？
+for factorial oversee was zero啊。
+对，是啊，sorry，i don't know what IM doing is see there is always upfront so everything here is one see there is a prefecture呃，不是哎。
+One one one x force the minus six factorial XQ plus start dot down。
+This is why one and why is zero what about see you one plus see one again send you ask of were one。
+i want of your x because of的RES it could the minus one that was see you one yes SX minus one of the three factory you you plus one of were five factors minus one of the seven factory you x seven plus到到到哎and this this anybody know everybody familiar with the pattern。
+那你is this function。
+Anybody you remember what is the。
+是series呃目的the summation of this function。
+三偶尔it only can tenant even power soon。X。
+This is cos。
+this is closed up and more and this is sign作为川少the solution is js。
+See your code and x plus see one s next。
+Over over the complicated rss i'm body the and believe me simple result。
+嗯，and this is and this is how we can get。
+有道ihc be because if you notice this point，this point this question is very出手。
+the reason why s呃the reason why i say we are lucky and the reason why this is this things example with special because i actually we solved the initially could in addition information after have her we all of two poss'ble index for being near this is what we all for being index that's why it's all in addition in which we thought of the for this to be too for being the things。
+that x you see的不给你this what are they want need to into the next order their profession。
+We get free parameter。
+more is minus one see you want can be any day it's always true搜一get the extra free private see one see zero is always free but see you one three this is a bonus this is special this is not generally true that's why i said say this is so。
+呃，思路share lock。
+So let the last example of the hold the whole section three point four the exceptional case it's well we do have this。
+别动，have this the study from it the rest of it at this哎哎沙莉广that s about all this you only get one for business solution，你们这是干不because of the lot will get because of the the the one the the就是this question that i have like this你lucky live we get too for business solutions these two。
+but i and that the natural example啊the the the many more examples that i would not just IIII would just skip呃at least the first couple of steps briefly so the last example i have a prepared this this嗯and the i was。
+I will go through very quickly。
+小一for this example p is one p of XI again is he go to whatever the cold fusion function。
+in front of my prime divided by the leading confession and then multiply by x崩。嗯。
+东风不用so it's x plus six。
+So is equal to six plus plus zero multiple by wept but not does does so this is p zero this is he one is p zero is p zero is six and p one is equal to。
+one and p two its equal to zero it was the p three equals four equals哒哒。
+哎，so this is T。
+What about all Q。
+here is he could to ask x of x gra are multiple x great so it's x so it's是一个图zero plus one more to ply by eggs是zero multiple but will but do not do so this is he zero this this you want this this q two。
+so as a general rule so you read the text table are you can if you're money life to呃to identify。
+but identify here儿。
+哎，对手in this equation，so the initial equation。
+In the show，al equation。
+Without doing all the power series differentiation and plunging into the complicated the big my phone the in it initial equation it's always this are multiply by our minus one plus he is your are plus q zero equals to zero。
+Always with that in this show condition i need this is is the intensive is that all p zero is six。
+He there it says q zero is zero。
+so if而our plus five equal to zero。
+啊，so all one is they could to zero and are two equals to minus five。
+yeah，操浩林丹没有equation of degree two you always oa set to solution on the come back explain of good according to find the mental zero of algebra包装结实哦，光照标也第二的one is s five。
+哎。
+and that in this example ii have to say we're are also fairly lucky so plugged into哎since since this is also it takes for example i will skip the data about the competition it's all most the same as the previous one and the result is almost the same as the prior匹配的说in the sense that the solution are two the two fundamental solutions are both for bonus series so the。
+Solution why is he could to see their，why is your process one why one so why is zero，yes one over A。
+That should the fifth。
+one minus x plus squares of two plus start off down so this is why zero and why one is one of呃x five x five minus qa six to the six plus do not do2anyway收and the and this example you see the same partner as in the previous one so you sort it is so we should you get two solutions you start from the smaller one you plug into。
+The next order the confusion you get a free parameter see one so you have see is zero see one being two three parameters。
+maybe he means you have three是10年历independence不be near a solution。
+sm第一张的too哎。
+So in the。
+The remaining time。
+I'm afraid that i think is today is just too much does that the a too much to that just already so i'm not gonna do you any more competition instead i'm m just got the tell you the result i am going to tell you the application of motivation。
+the first of all the motivation so what will look looking in at here here is not the famous well name after the someone be so special equation so previously in the in section to want to II connected the policies might to what we all冷血的differential equation IR的differential equation意思啊very classical old de coming from practical problem he uh aa problems in the day names of electrical and。
+that it is in electrical and needle呃还to dynamic from this this name Y。
+introduced pe so you thought those pd using the separation of variables you get the hand the differential equation then you have to use the paris this is method to get the younger man the r的function the first of second kind so those were ordinary points。
+I three is my son in this session in these two sections section，section three and section four pally section four we come to the best of equation that so differential equation is also。
+Also comes from。
+APD this actually the same PDES the short the final question but this time the geometry ary is not the sphere anymore so the shared the rounder defintion question is connected to the he did the he did should version or electric。
+It is the try the electronic super tion of as fair a ball but be so the question a best of function it's really late to hit the bush are around an excellent。
+a poo嗯。
+好，那selander。
+So so that's why are are are i'm gna i'm just get on the start here i'm gonna start appear and are let you。
+Go over carefully actually you should do yourself we do it read do it all by yourself for all the examples that i have done today this is one thing II am asking you to do we do all the examples that。
+I have done today and。
+Read carefully section three point five and three point six that should the three point for two point five and three point six three point five was three point six。
+This nothing new it's just that they're dedicated to the best of functions and it's introduction section and three point for it already。
+it's just then these two are just two application sections，two big examples in two separate sections it's not something you all you need to do should you should do his first read sections two point as three point two to three point four two three four they want to power my this is for ordinary point three point is three singular and regular single point不不会fairly simple来the two example that that。
+Demonstrate the two funda for business solutions but three point four。
+it's the most the most difficult one the exceptional cases代售function please read carefully and do the examples by yourself because first因为need to do your homework here so each rr i'm afraid that。
+each of them require a lot of competition if you要doing it for the first time小please do start early so you need to do a read the three point for to do your homework plus。
+We will have the second quiz next friday。
+China and cloud next friday and the coverage the coverage of next great it's chapter two and three。
+chapter and in the last three weeks class today last week嗯they would be other other of the two classes last week来呃classes on friday and classes on saturday。
+i so是unfortunately because of the because of the rescheduling of the school university send a calendar so we will have next great we have a crazy last week and we have a quiz next week second quiz chapter。
+two嗯three啊，so lisa的two啊chapters and then i think i have fifteen minutes left呃，i don't think so那边是就是start a little bit right，let not do it that's not do this。
+这边先是V也还like can set you have a lot of to digest the day already and then the good the following the the show are what i wanted to start the little bit on chapter the five。
+But since it's not not and the homework is not and quiet so and we have already have a lot to that just days so that forget about the will do next week all right the that so we have about fifteen minutes life。
+嗯，that's what o again that's watch watch some videos and b not爱你，not probably not as interesting as the last one the II hope i hope everybody has watched that the the呃the video on what is the ground the step the same and how b udy and呢。
+the the name more people a more part three are more party呃drive the variation of calculus and so on the characters of variation。
+I hope everybody have that it if not this to so。
+as soon as possible as well and today the the video i'm gonna show you yes the video that i have the same hint at the bit is on how to use the separation of available able to so嘿你会选on the three which and need a getting the a the young the differential equation or best vacation the shy and differential equation for a sphere and best service equation for A。
+cylinder so the hand the hand the differentiation on the three嗯半兽equation for彻底。
+呃。
+the same嗯那是stars。
+an all also i have the the the lot，the lot of a the lot of啊II don't have time to go over the these materials then i now i think so let's why not that also go over some of this哦，我就是just this啊。
+不是。
+So i have a wow the many i think many interesting。
+materials on the website and let's just watch one of the day that would two of this完哎and then let me it introduce this哎first why not why not a bit i didn't have time because we have a are very company compared schedule life属于i didn't have time to go with these supplementary reading material let me go over this three are materials for trapped too check the two I。
+Think trapped to about these materials were trapped to a more important and。
+more帆会first呃let me with you。
+I know of it。
+So if you remember last time let saturday i believe。
+哎，ok。
+if you remember the last time we try to set up something like this why the price us啊A我like the prime plus be my price was see why equals to have哎这些事啊。
+second order200not home more。
+you need a castle fashion equation做AB soda we and see。
+Let's say they are real numbers love if you remember。
+在3size or the electric circus are you all，how many also later lisa all really you life phenomenon can you life is not my of can be in model eventually model by this question for example啊，if you replace the if AM bethea see are some numbers s such that such that the natural frequency。
+the character resting value of the equation yes imagine what counts and the its not the first thing is also22sely3的扩。
+散会then you hear some但you would it sounds and what by not of little in噻this is she loomis something that if you put into your life year and why am two different frequencies of south再打我是不是很only different by just a little bit number much。
+just the little bit time in need it probably呃他you can not realize the difference class day。
+medical research says that if you if you listen to what one frequency some on the left year and slightly different frequencies are on the other year3好it will you we make you this sounds will make your relax and your anxiety or even depression。
+so this is what i found interesting so somehow it does funny funny stuff to your bring of your quality text呃things i感受嗯it going to the first read the second try for your our self i know everyone to really is very good with呃在some of you are very good with the coding of a white coding or think of passing a so far try to see if you。
+can come up with two signals，one is side need，one has set different frequency than the other and then input to your life and right year see if you feel relaxed嗯come comfortable that's one i should meti。
+second the next form to your o yes s exactly exactly related to the work with also really that it that exactly呃我为呃relate to what with the last time the way my question。
+why we know哎i know some of you if not most or all，not all know how to play in through some someone of insurance string especially string instrument地摊儿，violin channel，even2胡，琵琶，liza all string instruments，all the sounds created by any string instrument in goverment by this simple we decoration。
+这是second order the part show differential equation so to serve，而i would also show you in the in this in this video the this well would the fine we need to the five啊this professor will show you how to model how to write down this also should different question and how to solve using the separation。
+哦，be able exactly the same way that that introduced last weekend saturday now what's the what what does the mean，what does the mean in real life it means that this is exactly why the musicians oh my the medical。
+musicologist can4大帝少study music，the study every more every song in the nature UC this my the medical to this using the simple all day so this is the one page you get player around show。
+啊，let me show down这点lot of a division which is the same as the example m ass in the video and then you see this waves that you probably have been the time does n't of time in fixing or single prices the experiment but he is the so at the end of the day。
+At the end of the day this is this is the song you getting。
+一周it is it is离你company bin ation of frequencies，0年他们the frequencies of south我。
+Choose and this is the way right fit。二手也开车。
+decay in some the became her because french一开始evo eventually does that找不到社会。
+reason the were something tion this this deck is slow than you keep hearing the song怕死你here are you can here suppose you start with啊standard see来what was the what what is the frequency of stand the system都four hundred forty it hurts哎，so the fundamental frequency is even lower have of it出汗正川体but the same some一次one one out of the lower。
+lucy is she，hi呃，有you should you hit the term啊c see to see three four for for dinner in an opera以前you can he it as high as see for even i know some some some2就some even him she six。
+but大家知道usually you can most of you guys。
+ordinary people can take see two of three anyway，this is嗯这是and you see喂what about the overcome NS we know we know the reason why we here ear over time of course you if you play guitar or any man抖咪嗦the major c对有发烧的minor cord所第一找哦就是the different sounds adding together。
+嗯。
+cdg哎，the major。
+嗯。
+i need different my like收藏list are just。
+There were combination of waves。
+哦，different frequencies all this could the seeds are just solutions of ok呀of the of the啊solution of this way the equation let me see if i can fine this see this。
+frequency is big pay by the the number of the i get that the member the different line of the different number of the string我give you different frequency and give you give you different south来the that's why由于谦虚change the position of your fingers。
+嗯，有有you you you you use your fingers to change the length of the stream on your guitar on your宝类脑，you check了to give you different different frequency of our south they different over the time and the hands the friend course the the major code is of me show that the something that new we have just heard the minor is a little with them，我是。
+这份and they different嗯。
+let the lower the second the second of the second theme of frequency is the lower so there are a lot of things that you can play around嗯。
+the first过来。
+the timber that the quality the texture of the sun it's still different and this course on the different over the time so that's why在等the vibration of the texture is different that why that the some of the times they different from the song of channel3is different from the sound of呃呃二胡也是the different song from its has the different sort of啊啊是下。
+了我any other three one they i try the guitar that this this is the some of the of and electronic guai。
+because that over time the difference the composition哦，对呃我的我也没艾伟so you can play around you again the especially if you are呃music if you uses。
+嗯。
+说的是can not the one page can see all right so i think that it that the could today so what we have a last that just and we have a啊拉啊拉什么so many diary read reading that you can we do want to have the class嗯next week we will have next。
+don't forget next next friday we will have the second great and then we will呃是try to start R。
+such a chapter five哎actually you i will finish up about开除have seven meeting is this the matter of we really happy29next three great short the five the last price up to seven。
+对。
+没有。
+不是是不喂。
+的是。
+行。
+好。
+嗯。
+对对。
+嗯。
+七个没有要。
+不是。
+不是这个是。
+对对。
+是。
+嗯。
+是的，是的。
+是。
+我这。
+嗯。
+那么对。
+不行。
+不。
+对。
+不会嗯。
+内容也撤了。
+好不。
+不。
+不会，我这现在我解释。嗯，百分之上线。
+确。
+对。
+行。
+不去。
+不是嗯。
+关机。
